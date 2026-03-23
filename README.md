@@ -25,6 +25,11 @@ The final truth is at **[eliskcage.github.io](https://eliskcage.github.io)**
 <<.>>      the thing we are trying to avoid
 ```
 
-Six patents. One equation family. All from a . at 3am.
+Seven patents. One equation family. All from a . at 3am.
+
+| | |
+|---|---|
+| **Cancer paper** | [cancer-extraction-vector.html](https://eliskcage.github.io/cancer-extraction-vector.html) — cancer cell as extraction vector ψ=[0,0,1], treatment by axis restoration |
+| **The Living Equation** | 39 claims · genome · absence · soul of man clock · filed 23 March 2026 |
 
 **Work as a team or blow ourselves up. Those are the options.**
