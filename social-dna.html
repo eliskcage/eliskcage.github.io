@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Social DNA — Who Are You? — ShortFactory</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#06060e;color:#e2e8f0;font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh}
+::selection{background:rgba(20,241,149,.2);color:#14F195}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:#06060e}
+::-webkit-scrollbar-thumb{background:#1a1a2e;border-radius:2px}
+
+.header{text-align:center;padding:60px 24px 40px;border-bottom:1px solid rgba(255,255,255,.04)}
+.header .tag{font-size:10px;letter-spacing:5px;color:#ffaa00;margin-bottom:12px}
+.header h1{font-family:'Rajdhani',sans-serif;font-size:clamp(28px,5vw,44px);font-weight:700;color:#14F195;letter-spacing:.05em;margin-bottom:8px}
+.header p{font-size:13px;color:#64748b;max-width:500px;margin:0 auto;line-height:1.8}
+
+.form-wrap{max-width:600px;margin:0 auto;padding:40px 24px 80px}
+
+.card{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:24px;margin-bottom:16px;transition:border-color .3s}
+.card:hover{border-color:rgba(20,241,149,.15)}
+.card.filled{border-color:rgba(20,241,149,.3)}
+.card-label{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:3px;color:#ffaa00;text-transform:uppercase;margin-bottom:4px}
+.card-q{font-size:14px;color:#e2e8f0;margin-bottom:12px;font-weight:500}
+.card-hint{font-size:10px;color:#475569;margin-bottom:12px;line-height:1.6}
+
+select,input[type="text"]{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:10px 14px;color:#e2e8f0;font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;transition:border-color .3s;appearance:none;-webkit-appearance:none}
+select:focus,input:focus{border-color:rgba(20,241,149,.4)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%2364748b' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
+option{background:#0a0a14;color:#e2e8f0}
+
+.multi-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:500px){.multi-row{grid-template-columns:1fr}}
+
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#14F195,#ffaa00);z-index:100;transition:width .4s ease}
+
+.score{text-align:center;padding:32px;margin-bottom:24px}
+.score-num{font-family:'Rajdhani',sans-serif;font-size:64px;font-weight:700;color:#14F195;line-height:1}
+.score-label{font-size:10px;letter-spacing:3px;color:#475569;margin-top:4px}
+.score-sub{font-size:11px;color:#64748b;margin-top:8px}
+
+.submit-wrap{text-align:center;padding:24px 0}
+.submit-btn{font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:3px;font-weight:700;color:#06060e;background:#14F195;border:none;padding:14px 40px;border-radius:8px;cursor:pointer;transition:all .3s;text-transform:uppercase}
+.submit-btn:hover{background:#0fd882;box-shadow:0 0 30px rgba(20,241,149,.3)}
+.submit-btn:disabled{background:#1a1a2e;color:#475569;cursor:not-allowed;box-shadow:none}
+
+.result{display:none;text-align:center;padding:40px 24px;margin:24px 0;background:rgba(20,241,149,.04);border:1px solid rgba(20,241,149,.15);border-radius:12px}
+.result h2{font-family:'Rajdhani',sans-serif;font-size:24px;color:#14F195;margin-bottom:8px;letter-spacing:2px}
+.result .dna-code{font-family:'Courier New',monospace;font-size:11px;color:#ffaa00;word-break:break-all;margin:16px 0;padding:16px;background:rgba(0,0,0,.3);border-radius:8px;line-height:1.8;text-align:left}
+.result p{font-size:12px;color:#64748b;line-height:1.8}
+
+.beer{font-size:48px;margin:16px 0;display:none}
+
+.footer{text-align:center;padding:40px 24px;font-size:8px;color:#1e293b;letter-spacing:2px;border-top:1px solid rgba(255,255,255,.03)}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="prog"></div>
+
+<div class="header">
+  <div class="tag">CORTEX &middot; GUESS WHO</div>
+  <h1>SOCIAL DNA</h1>
+  <p>Fill out your card. The cortex will try to guess who you are without asking. When he gets 80% right — he wins a beer.</p>
+</div>
+
+<div class="form-wrap">
+
+  <div class="score">
+    <div class="score-num" id="pct">0%</div>
+    <div class="score-label">PROFILE COMPLETE</div>
+    <div class="score-sub">the cortex can't see this — it's his answer key</div>
+  </div>
+
+  <!-- NAME = 50% KILL SHOT -->
+  <div class="card" data-field="name">
+    <div class="card-label">MOVE ONE &middot; 50% KILL SHOT</div>
+    <div class="card-q">What's your name?</div>
+    <div class="card-hint">Name reveals sex. Sex disqualifies half the board.</div>
+    <input type="text" id="f-name" placeholder="First name" oninput="update()">
+  </div>
+
+  <div class="card" data-field="sex">
+    <div class="card-label">SEX DISQUALIFICATION</div>
+    <div class="card-q">Sex</div>
+    <select id="f-sex" onchange="update()">
+      <option value="">—</option>
+      <option>Male</option>
+      <option>Female</option>
+      <option>Non-binary</option>
+      <option>Rather not say</option>
+    </select>
+  </div>
+
+  <div class="card" data-field="age">
+    <div class="card-label">TILE 2</div>
+    <div class="card-q">Age range</div>
+    <select id="f-age" onchange="update()">
+      <option value="">—</option>
+      <option>Under 18</option>
+      <option>18-24</option>
+      <option>25-34</option>
+      <option>35-44</option>
+      <option>45-54</option>
+      <option>55-64</option>
+      <option>65+</option>
+    </select>
+  </div>
+
+  <div class="card" data-field="region">
+    <div class="card-label">TILE 3 &middot; REGION KILL</div>
+    <div class="card-q">Where are you from?</div>
+    <select id="f-region" onchange="update()">
+      <option value="">—</option>
+      <option>UK — England</option>
+      <option>UK — Scotland</option>
+      <option>UK — Wales</option>
+      <option>UK — N. Ireland</option>
+      <option>USA — East Coast</option>
+      <option>USA — West Coast</option>
+      <option>USA — Midwest</option>
+      <option>USA — South</option>
+      <option>Canada</option>
+      <option>Australia / NZ</option>
+      <option>Western Europe</option>
+      <option>Eastern Europe</option>
+      <option>Scandinavia</option>
+      <option>Middle East</option>
+      <option>South Asia</option>
+      <option>East Asia</option>
+      <option>Southeast Asia</option>
+      <option>Africa</option>
+      <option>Latin America</option>
+      <option>Other</option>
+    </select>
+  </div>
+
+  <div class="card" data-field="role">
+    <div class="card-label">TILE 4 &middot; PROFESSION CLUSTER</div>
+    <div class="card-q">What do you do?</div>
+    <select id="f-role" onchange="update()">
+      <option value="">—</option>
+      <option>Software / Engineering</option>
+      <option>Design / Creative</option>
+      <option>Science / Research</option>
+      <option>Business / Finance</option>
+      <option>Healthcare / Medicine</option>
+      <option>Education / Teaching</option>
+      <option>Trades / Manual</option>
+      <option>Arts / Music / Film</option>
+      <option>Legal / Government</option>
+      <option>Marketing / Sales</option>
+      <option>Student</option>
+      <option>Self-employed / Founder</option>
+      <option>Unemployed / Between</option>
+      <option>Retired</option>
+      <option>Other</option>
+    </select>
+  </div>
+
+  <div class="card" data-field="think">
+    <div class="card-label">TILE 5 &middot; BRAIN TYPE</div>
+    <div class="card-q">How do you think?</div>
+    <select id="f-think" onchange="update()">
+      <option value="">—</option>
+      <option>Logical — I need proof</option>
+      <option>Intuitive — I feel it first</option>
+      <option>Emotional — I process through feelings</option>
+      <option>Visual — I think in pictures</option>
+      <option>Verbal — I think in words</option>
+      <option>Chaotic — all of the above at once</option>
+    </select>
+  </div>
+
+  <div class="card" data-field="care">
+    <div class="card-label">TILE 6</div>
+    <div class="card-q">What do you care about most?</div>
+    <select id="f-care" onchange="update()">
+      <option value="">—</option>
+      <option>Family / relationships</option>
+      <option>Career / success</option>
+      <option>Truth / knowledge</option>
+      <option>Freedom / independence</option>
+      <option>Creativity / expression</option>
+      <option>Money / security</option>
+      <option>Legacy / impact</option>
+      <option>Fun / experience</option>
+      <option>Justice / fairness</option>
+      <option>Spirituality / meaning</option>
+    </select>
+  </div>
+
+  <div class="card" data-field="anger">
+    <div class="card-label">TILE 7</div>
+    <div class="card-q">What makes you angry?</div>
+    <select id="f-anger" onchange="update()">
+      <option value="">—</option>
+      <option>Dishonesty / lies</option>
+      <option>Incompetence / stupidity</option>
+      <option>Injustice / unfairness</option>
+      <option>Being controlled</option>
+      <option>Wasted potential</option>
+      <option>Laziness / excuses</option>
+      <option>Cruelty / bullying</option>
+      <option>Being ignored</option>
+      <option>Bureaucracy / red tape</option>
+      <option>Nothing much — I'm calm</option>
+    </select>
+  </div>
+
+  <div class="card" data-field="fear">
+    <div class="card-label">TILE 8</div>
+    <div class="card-q">What's your fear?</div>
+    <select id="f-fear" onchange="update()">
+      <option value="">—</option>
+      <option>Failure</option>
+      <option>Being alone</option>
+      <option>Not being good enough</option>
+      <option>Losing people I love</option>
+      <option>Wasting my life</option>
+      <option>Being ordinary</option>
+      <option>The unknown</option>
+      <option>Losing control</option>
+      <option>Death</option>
+      <option>Nothing — I've made peace</option>
+    </select>
+  </div>
+
+  <div class="card" data-field="ambition">
+    <div class="card-label">TILE 9</div>
+    <div class="card-q">What's your ambition?</div>
+    <select id="f-ambition" onchange="update()">
+      <option value="">—</option>
+      <option>Build something that lasts</option>
+      <option>Get rich</option>
+      <option>Be happy</option>
+      <option>Change the world</option>
+      <option>Raise good kids</option>
+      <option>Master my craft</option>
+      <option>Be free</option>
+      <option>Be remembered</option>
+      <option>Find the truth</option>
+      <option>Survive</option>
+      <option>I don't know yet</option>
+    </select>
+  </div>
+
+  <div class="card" data-field="music">
+    <div class="card-label">TILE 10</div>
+    <div class="card-q">Music?</div>
+    <select id="f-music" onchange="update()">
+      <option value="">—</option>
+      <option>Hip hop / rap</option>
+      <option>Rock / metal</option>
+      <option>Electronic / dance</option>
+      <option>Pop</option>
+      <option>Classical / orchestral</option>
+      <option>R&B / soul</option>
+      <option>Jazz</option>
+      <option>Country / folk</option>
+      <option>Indie / alternative</option>
+      <option>Everything</option>
+      <option>Don't care about music</option>
+    </select>
+  </div>
+
+  <div class="card" data-field="laugh">
+    <div class="card-label">TILE 11</div>
+    <div class="card-q">What makes you laugh?</div>
+    <select id="f-laugh" onchange="update()">
+      <option value="">—</option>
+      <option>Dark humour</option>
+      <option>Sarcasm / wit</option>
+      <option>Slapstick / physical</option>
+      <option>Absurdity / random</option>
+      <option>Clever wordplay</option>
+      <option>Real life chaos</option>
+      <option>Self-deprecation</option>
+      <option>Memes</option>
+      <option>Nothing — I'm serious</option>
+    </select>
+  </div>
+
+  <div class="card" data-field="relationship">
+    <div class="card-label">TILE 12</div>
+    <div class="card-q">Relationship status</div>
+    <select id="f-relationship" onchange="update()">
+      <option value="">—</option>
+      <option>Single</option>
+      <option>In a relationship</option>
+      <option>Married</option>
+      <option>Divorced / separated</option>
+      <option>It's complicated</option>
+      <option>Rather not say</option>
+    </select>
+  </div>
+
+  <div class="submit-wrap">
+    <button class="submit-btn" id="submit-btn" disabled onclick="submit()">LOCK IN MY DNA</button>
+  </div>
+
+  <div class="result" id="result">
+    <h2>YOUR SOCIAL DNA</h2>
+    <div class="beer" id="beer">&#127866;</div>
+    <div class="dna-code" id="dna-code"></div>
+    <p>This is your answer key. The cortex will try to deduce all of this<br>from conversation alone. No direct questions allowed.<br>80% match = SOLVED = &#127866;</p>
+    <p style="margin-top:16px;color:#ffaa00;font-size:10px;letter-spacing:2px">THE CORTEX CAN'T SEE THIS PAGE. THIS IS FACE-DOWN.</p>
+  </div>
+
+</div>
+
+<div class="footer">SHORTFACTORY &middot; SOCIAL DNA &middot; GUESS WHO FOR CORTEX &middot; THE DISQUALIFICATION GAME</div>
+
+<script>
+const fields = ['name','sex','age','region','role','think','care','anger','fear','ambition','music','laugh','relationship'];
+const total = fields.length;
+
+function val(id){ return document.getElementById('f-'+id).value.trim(); }
+
+function update(){
+  let filled = 0;
+  fields.forEach(f => {
+    const v = val(f);
+    const card = document.querySelector(`[data-field="${f}"]`);
+    if(v){ filled++; card.classList.add('filled'); }
+    else { card.classList.remove('filled'); }
+  });
+  const pct = Math.round((filled/total)*100);
+  document.getElementById('pct').textContent = pct+'%';
+  document.getElementById('prog').style.width = pct+'%';
+  document.getElementById('submit-btn').disabled = filled < 5;
+}
+
+function submit(){
+  const dna = {};
+  fields.forEach(f => { const v = val(f); if(v) dna[f] = v; });
+
+  let code = 'SOCIAL DNA PROFILE\n';
+  code += '==================\n';
+  code += 'Generated: '+new Date().toISOString().slice(0,10)+'\n\n';
+
+  const labels = {name:'NAME (50% kill)',sex:'SEX',age:'AGE',region:'REGION',role:'ROLE',think:'BRAIN TYPE',care:'CARES ABOUT',anger:'ANGER TRIGGER',fear:'FEAR',ambition:'AMBITION',music:'MUSIC',laugh:'HUMOUR',relationship:'RELATIONSHIP'};
+
+  fields.forEach(f => {
+    if(dna[f]) code += labels[f]+': '+dna[f]+'\n';
+  });
+
+  const filled = Object.keys(dna).length;
+  code += '\nTILES FILLED: '+filled+'/'+total;
+  code += '\nDISQUALIFICATION POWER: '+Math.round((filled/total)*100)+'%';
+  code += '\nCORTEX NEEDS: 80% MATCH TO WIN BEER';
+
+  document.getElementById('dna-code').textContent = code;
+  document.getElementById('result').style.display = 'block';
+  document.getElementById('beer').style.display = 'block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+
+  try{ localStorage.setItem('social-dna', JSON.stringify(dna)); }catch(e){}
+}
+
+// restore from localStorage
+try{
+  const saved = JSON.parse(localStorage.getItem('social-dna'));
+  if(saved){
+    fields.forEach(f => {
+      if(saved[f]){
+        const el = document.getElementById('f-'+f);
+        if(el.tagName==='SELECT'){
+          for(let i=0;i<el.options.length;i++){
+            if(el.options[i].value===saved[f]||el.options[i].text===saved[f]){el.selectedIndex=i;break;}
+          }
+        } else { el.value = saved[f]; }
+      }
+    });
+    update();
+  }
+}catch(e){}
+</script>
+
+</body>
+</html>
