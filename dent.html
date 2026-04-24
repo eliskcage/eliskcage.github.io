@@ -898,7 +898,7 @@ let musicOn=false;
     const center=r.top+r.height/2;
     const dist=Math.abs(center-window.innerHeight/2);
     const prox=Math.max(0,1-dist/(window.innerHeight*1.2));
-    grokAudios.forEach(a=>{if(a)a.volume=prox;});
+    grokAudios.forEach(a=>{if(a)a.volume=Math.min(1,prox*1.3);});
     if(!musicOn)return;
     if(bgMovie) bgMovie.volume=prox*0.25;
     if(bgZen) bgZen.volume=(1-prox)*0.2;
