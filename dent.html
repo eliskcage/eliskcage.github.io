@@ -306,8 +306,16 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
       <p>Every node is a two-way vibrational interface. Feel AND transmit — like a phone screen that reads your finger AND shows you what it sees, through the same surface. The structure IS the sensor. Touch is data in both directions simultaneously. No bolted-on sensors. Tactile awareness is native.</p>
     </div>
     <div class="card">
+      <h3>ALUMINIUM CHEMISTRY — EXPLOSIVE POWER</h3>
+      <p>Aluminium shards carry chemical energy. Explosively powerful when needed. Dissolvable metal creates temporary conductive pathways for fast power routing. Shards dissolve at destination — delivering structure AND fuel through the same transit system. Like blood carrying oxygen AND glucose.</p>
+    </div>
+    <div class="card">
+      <h3>SUPERCAPACITOR RECHARGE</h3>
+      <p>Every node is a supercapacitor. Fires its stored energy on task execution. Spent nodes require immensely fast recharging — aluminium shards deliver it via the same polarisation-flip transit. The shard arrives, dissolves, the node recharges. The scaffold never runs dry because the blood is also the battery.</p>
+    </div>
+    <div class="card">
       <h3>THE COMPLETE BODY</h3>
-      <p>Scaffold = skeleton. Shards = blood. Node vibration = touch/feeling. Node communication = nervous system. Truth-score verification = immune system. A Computanium body that builds, heals, feeds, feels, and defends itself.</p>
+      <p>Scaffold = skeleton. Shards = blood + fuel. Aluminium chemistry = metabolism. Node vibration = touch. Node communication = nervous system. Supercapacitors = cellular energy. Truth-score verification = immune system. A Computanium body that builds, heals, feeds, feels, powers, and defends itself.</p>
     </div>
   </div>
   <p style="font-size:8px;color:#334;text-align:center;margin-top:16px;letter-spacing:.1em">IPFS TIME-LOCKED: QmXmPEriVLahmoW3ooGPnLMbh4ibTVLpqr7ymfshV6HiY8</p>
@@ -917,7 +925,7 @@ if(sc){
     const startIdx=Math.floor(Math.random()*gNodes.length);
     const targetIdx=Math.floor(Math.random()*gNodes.length);
     if(startIdx===targetIdx)return;
-    const types=['reinforce','melt','fill','expand','spring'];
+    const types=['reinforce','melt','fill','expand','spring','recharge'];
     shards.push({
       from:startIdx, to:targetIdx, pos:0, speed:0.008+Math.random()*0.012,
       path:buildPath(startIdx,targetIdx),
@@ -949,7 +957,7 @@ if(sc){
     return path;
   }
 
-  const TYPE_COL={reinforce:'0,212,255',melt:'255,140,0',fill:'168,85,247',expand:'0,255,136',spring:'255,224,102'};
+  const TYPE_COL={reinforce:'0,212,255',melt:'255,140,0',fill:'168,85,247',expand:'0,255,136',spring:'255,224,102',recharge:'255,80,80'};
 
   function drawTri(x,y,size,rot,col,alpha){
     ctx.save();ctx.translate(x,y);ctx.rotate(rot);
@@ -1012,10 +1020,20 @@ if(sc){
       const segFrac=pathPos-segIdx;
 
       if(segIdx>=s.path.length-1){
-        // Arrived — stack at destination
         const dest=gNodes[s.path[s.path.length-1]];
-        dest.stack=Math.min(1,dest.stack+0.4);
-        dest.flash=1;
+        if(s.type==='recharge'){
+          dest.flash=1;dest.stack=0;
+          // Supercapacitor burst — energy ripple to neighbours
+          gEdges.forEach(e=>{
+            let nb=-1;
+            if(e.a===s.path[s.path.length-1])nb=e.b;
+            if(e.b===s.path[s.path.length-1])nb=e.a;
+            if(nb>=0)gNodes[nb].flash=Math.max(gNodes[nb].flash,0.6);
+          });
+        } else {
+          dest.stack=Math.min(1,dest.stack+0.4);
+          dest.flash=1;
+        }
         s.alive=false;
         return;
       }
