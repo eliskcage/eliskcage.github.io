@@ -91,9 +91,10 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
 #pipe-dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
 .pipe-dot{width:5px;height:5px;border-radius:50%;background:#1b263b;transition:all .3s}
 .pipe-dot.active{background:#00d4ff;box-shadow:0 0 6px rgba(0,212,255,.4)}
-#sound-btn{position:fixed;bottom:16px;right:16px;z-index:100;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);color:#00d4ff;font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:.15em;padding:6px 14px;border-radius:20px;cursor:pointer;transition:all .3s;backdrop-filter:blur(8px)}
-#sound-btn:hover{background:rgba(0,212,255,.15);border-color:#00d4ff}
-#sound-btn.active{background:rgba(0,212,255,.12);border-color:#00d4ff;box-shadow:0 0 12px rgba(0,212,255,.15)}
+#sound-btn{position:fixed;bottom:16px;right:16px;z-index:100;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.08);color:rgba(0,212,255,.4);font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:.2em;padding:8px 16px;border-radius:20px;cursor:pointer;transition:all .6s;backdrop-filter:blur(8px);animation:btn-breathe 4s ease-in-out infinite}
+@keyframes btn-breathe{0%,100%{border-color:rgba(0,212,255,.06);color:rgba(0,212,255,.3)}50%{border-color:rgba(0,212,255,.18);color:rgba(0,212,255,.55)}}
+#sound-btn:hover{background:rgba(0,212,255,.12);border-color:#00d4ff;color:#00d4ff;box-shadow:0 0 16px rgba(0,212,255,.15);animation:none}
+#sound-btn.active{background:rgba(0,212,255,.1);border-color:#00d4ff;color:#00d4ff;box-shadow:0 0 12px rgba(0,212,255,.12);animation:none}
 
 /* ═══ INTRO OVERLAY ═══ */
 #intro-overlay{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(13,27,42,.95);pointer-events:none;transition:opacity 1.5s}
@@ -122,7 +123,7 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
   <div class="nav-brand">THE DENT MATRIX</div>
   <div class="nav-tag">ARTHUR ROBOTICS × SHORTFACTORY</div>
 </nav>
-<button id="sound-btn" onclick="toggleAmbient()">SOUND ON</button>
+<button id="sound-btn" onclick="toggleAmbient()">◉</button>
 <div id="progress" style="width:0%"></div>
 
 <!-- ═══ MESH BACKGROUND ═══ -->
@@ -151,7 +152,8 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
     <audio id="grok-v1" preload="auto" src="grok-intro.mp3"></audio>
     <audio id="grok-v2" preload="auto" src="grok-intro2.mp3"></audio>
     <audio id="grok-v3" preload="auto" src="grok-intro3.mp3"></audio>
-    <audio id="bg-music" preload="auto" loop src="origami-bg-music.mp3"></audio>
+    <audio id="bg-movie" preload="auto" loop src="origami-bg-music.mp3"></audio>
+    <audio id="bg-zen" preload="auto" loop src="zen-bg-music.mp3"></audio>
     <div id="intro-overlay">
       <div class="io-line io-brand" id="io0">SHORTFACTORY</div>
       <div class="io-line io-x" id="io1">×</div>
@@ -883,19 +885,23 @@ if(sc){
   img.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent(url);
 })();
 
-// ═══ PROXIMITY VOLUME — louder near hero, fades as you scroll away ═══
+// ═══ PROXIMITY CROSSFADE — origami near movie, zen when scrolled away ═══
+let musicOn=false;
 (function(){
   const wrap=document.getElementById('hero-vid-wrap');
   const grokAudios=[document.getElementById('grok-v1'),document.getElementById('grok-v2'),document.getElementById('grok-v3')];
-  const bgMusic=document.getElementById('bg-music');
+  const bgMovie=document.getElementById('bg-movie');
+  const bgZen=document.getElementById('bg-zen');
   if(!wrap)return;
   window.addEventListener('scroll',()=>{
     const r=wrap.getBoundingClientRect();
     const center=r.top+r.height/2;
     const dist=Math.abs(center-window.innerHeight/2);
-    const proxVol=Math.max(0,1-dist/(window.innerHeight*1.2));
-    grokAudios.forEach(a=>{if(a)a.volume=proxVol;});
-    if(bgMusic&&bgMusic._bgOn) bgMusic.volume=0.25+proxVol*0.35;
+    const prox=Math.max(0,1-dist/(window.innerHeight*1.2));
+    grokAudios.forEach(a=>{if(a)a.volume=prox;});
+    if(!musicOn)return;
+    if(bgMovie) bgMovie.volume=prox*0.5;
+    if(bgZen) bgZen.volume=(1-prox)*0.4;
   });
 })();
 
@@ -1044,19 +1050,23 @@ function createAmbient(){
 
 function toggleAmbient(){
   const btn=document.getElementById('sound-btn');
-  const bgMusic=document.getElementById('bg-music');
+  const bgMovie=document.getElementById('bg-movie');
+  const bgZen=document.getElementById('bg-zen');
   if(!ambientOn){
-    ambientOn=true;
+    ambientOn=true;musicOn=true;
     if(!ambientCtx) createAmbient();
     else masterGain.gain.setTargetAtTime(0.7,ambientCtx.currentTime,1);
     if(ambientCtx.state==='suspended') ambientCtx.resume();
-    if(bgMusic){bgMusic._bgOn=true;bgMusic.volume=0.45;bgMusic.play().catch(()=>{});}
-    btn.textContent='SOUND OFF';btn.classList.add('active');
+    if(bgMovie){bgMovie.volume=0.4;bgMovie.play().catch(()=>{});}
+    if(bgZen){bgZen.volume=0;bgZen.play().catch(()=>{});}
+    window.dispatchEvent(new Event('scroll'));
+    btn.textContent='◉';btn.classList.add('active');
   } else {
-    ambientOn=false;
+    ambientOn=false;musicOn=false;
     masterGain.gain.setTargetAtTime(0,ambientCtx.currentTime,1);
-    if(bgMusic){bgMusic._bgOn=false;bgMusic.pause();}
-    btn.textContent='SOUND ON';btn.classList.remove('active');
+    if(bgMovie)bgMovie.pause();
+    if(bgZen)bgZen.pause();
+    btn.textContent='◉';btn.classList.remove('active');
   }
 }
 </script>
