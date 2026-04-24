@@ -302,8 +302,12 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
       <p>At macro scale: structural plates walking across a robotic body. At micro scale: nanite blood cells flowing through the scaffold's arteries. Same physics at both scales. The polarisation flip sequence is the heartbeat.</p>
     </div>
     <div class="card">
+      <h3>VIBRATIONAL TOUCH — TWO-WAY</h3>
+      <p>Every node is a two-way vibrational interface. Feel AND transmit — like a phone screen that reads your finger AND shows you what it sees, through the same surface. The structure IS the sensor. Touch is data in both directions simultaneously. No bolted-on sensors. Tactile awareness is native.</p>
+    </div>
+    <div class="card">
       <h3>THE COMPLETE BODY</h3>
-      <p>Scaffold = skeleton. Shards = blood. Node communication = nervous system. Truth-score verification = immune system. The biological metaphor is now complete. A Computanium body that builds, heals, feeds, and defends itself.</p>
+      <p>Scaffold = skeleton. Shards = blood. Node vibration = touch/feeling. Node communication = nervous system. Truth-score verification = immune system. A Computanium body that builds, heals, feeds, feels, and defends itself.</p>
     </div>
   </div>
   <p style="font-size:8px;color:#334;text-align:center;margin-top:16px;letter-spacing:.1em">IPFS TIME-LOCKED: QmXmPEriVLahmoW3ooGPnLMbh4ibTVLpqr7ymfshV6HiY8</p>
@@ -1046,12 +1050,25 @@ if(sc){
     // Clean dead shards
     for(let i=shards.length-1;i>=0;i--){if(!shards[i].alive)shards.splice(i,1);}
 
+    // Vibrational touch — two-way ripple pulses
+    gNodes.forEach(n=>{
+      if(n.flash>0.4){
+        const ripR=(1-n.flash)*30+5;
+        ctx.strokeStyle=`rgba(0,212,255,${n.flash*0.15})`;ctx.lineWidth=0.5;
+        ctx.beginPath();ctx.arc(n.x*sx,n.y*sy,ripR*sx,0,Math.PI*2);ctx.stroke();
+        // Second outward ripple (the "reply" — two-way)
+        const rip2=(1-n.flash)*50+10;
+        ctx.strokeStyle=`rgba(255,224,102,${n.flash*0.08})`;
+        ctx.beginPath();ctx.arc(n.x*sx,n.y*sy,rip2*sx,0,Math.PI*2);ctx.stroke();
+      }
+    });
+
     // Labels
     ctx.font='7px "Space Grotesk",sans-serif';ctx.textAlign='right';
     ctx.fillStyle='rgba(0,212,255,0.12)';
     ctx.fillText('POLARISATION FLIP TRANSIT',w-10,14);
     ctx.fillText('TRIANGULAR SHARD DELIVERY',w-10,24);
-    ctx.fillText('DOMINO LOCOMOTION',w-10,34);
+    ctx.fillText('TWO-WAY VIBRATIONAL TOUCH',w-10,34);
 
     // Legend
     ctx.textAlign='left';ctx.font='6px "Space Grotesk",sans-serif';
