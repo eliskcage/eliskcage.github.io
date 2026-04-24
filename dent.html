@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0d1b2a">
+<title>THE DENT MATRIX — Arthur Robotics × ShortFactory</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans-serif;overflow-x:hidden}
+::selection{background:rgba(0,212,255,.2);color:#00d4ff}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:#0d1b2a}
+::-webkit-scrollbar-thumb{background:#1b263b;border-radius:2px}
+
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;background:rgba(13,27,42,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,212,255,.08)}
+.nav-brand{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;color:#00d4ff;letter-spacing:.1em}
+.nav-tag{font-size:9px;letter-spacing:.2em;color:#8892a0}
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,#00d4ff,#00a8cc);z-index:101;transition:width .3s}
+
+.section{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 30px;position:relative}
+
+#hero{text-align:center}
+#hero .pre{font-size:10px;letter-spacing:.5em;color:#8892a0;margin-bottom:12px}
+#hero h1{font-family:'Rajdhani',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:700;color:#00d4ff;letter-spacing:.08em;margin-bottom:8px}
+#hero .sub{font-size:clamp(11px,1.8vw,14px);letter-spacing:.15em;color:#8892a0;font-weight:300;margin-bottom:6px}
+#hero .sub2{font-size:10px;color:#445;letter-spacing:.12em;margin-bottom:30px}
+#hero canvas{display:block;margin:0 auto 30px;border-radius:8px}
+#hero .scroll-hint{font-size:9px;letter-spacing:.3em;color:#1b263b;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:.8}}
+
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:900px;width:100%}
+.card{background:rgba(27,38,59,.5);border:1px solid rgba(0,212,255,.08);border-radius:8px;padding:20px;transition:all .3s}
+.card:hover{border-color:rgba(0,212,255,.25);transform:translateY(-2px)}
+.card h3{font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:.2em;color:#00d4ff;margin-bottom:8px;font-weight:600}
+.card p{font-size:10px;line-height:2;color:#8892a0}
+.card .map{font-size:9px;color:#00a8cc;margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,212,255,.06)}
+
+.sect-title{font-family:'Rajdhani',sans-serif;font-size:clamp(16px,3vw,24px);letter-spacing:.2em;color:#00d4ff;margin-bottom:6px;text-align:center;font-weight:600}
+.sect-sub{font-size:10px;letter-spacing:.12em;color:#445;margin-bottom:30px;text-align:center}
+
+#scaffold-vis{width:100%;max-width:700px;height:350px;margin-bottom:24px}
+#scaffold-vis canvas{width:100%;height:100%;border-radius:8px}
+
+.timeline{max-width:600px;width:100%;position:relative;padding-left:30px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,#00d4ff33,transparent)}
+.tl-item{position:relative;margin-bottom:24px;padding-left:20px}
+.tl-item::before{content:'';position:absolute;left:-25px;top:6px;width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px rgba(0,212,255,.4)}
+.tl-item h4{font-size:11px;letter-spacing:.15em;color:#00d4ff;margin-bottom:4px;font-weight:500}
+.tl-item p{font-size:10px;line-height:1.9;color:#8892a0}
+
+#deal{background:rgba(0,212,255,.03);border:1px solid rgba(0,212,255,.1);border-radius:8px;max-width:650px;width:100%;padding:30px;text-align:center}
+#deal h3{font-family:'Rajdhani',sans-serif;font-size:16px;letter-spacing:.25em;color:#00d4ff;margin-bottom:16px}
+.deal-opts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.deal-opt{background:rgba(13,27,42,.8);border:1px solid rgba(0,212,255,.12);border-radius:6px;padding:16px;text-align:center}
+.deal-opt h4{font-size:11px;letter-spacing:.2em;color:#00d4ff;margin-bottom:8px}
+.deal-opt p{font-size:9px;line-height:1.9;color:#8892a0}
+.deal-opt.gold{border-color:rgba(255,224,102,.2);background:rgba(255,224,102,.03)}
+.deal-opt.gold h4{color:#ffe066}
+#deal .note{font-size:8px;letter-spacing:.1em;color:#334;margin-top:12px}
+
+#proof{text-align:center}
+#proof .cid{font-family:'Courier New',monospace;font-size:8px;color:#334;word-break:break-all;max-width:500px;margin:8px auto}
+
+#finale{text-align:center}
+#finale h2{font-family:'Rajdhani',sans-serif;font-size:clamp(14px,2.5vw,22px);letter-spacing:.3em;color:#00d4ff;margin-bottom:10px}
+#finale p{font-size:10px;line-height:2.2;color:#8892a0;max-width:500px;margin:0 auto 20px}
+#finale .sig{font-size:9px;color:#334;letter-spacing:.1em;margin-top:20px}
+
+.btn{display:inline-block;font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:.2em;font-weight:600;color:#0d1b2a;background:#00d4ff;border:none;padding:10px 24px;border-radius:4px;text-decoration:none;cursor:pointer;transition:all .3s}
+.btn:hover{background:#00a8cc;box-shadow:0 0 20px rgba(0,212,255,.3)}
+.btn-ghost{background:transparent;color:#00d4ff;border:1px solid rgba(0,212,255,.2)}
+.btn-ghost:hover{background:rgba(0,212,255,.05);border-color:#00d4ff}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-brand">THE DENT MATRIX</div>
+  <div class="nav-tag">ARTHUR ROBOTICS × SHORTFACTORY</div>
+</nav>
+<div id="progress" style="width:0%"></div>
+
+<!-- ═══ HERO ═══ -->
+<section class="section" id="hero">
+  <div class="pre">A DOCKING PROPOSAL</div>
+  <h1>THE DENT MATRIX</h1>
+  <div class="sub">SELF-HEALING TASK-AWARE MAGNETIC SCAFFOLD</div>
+  <div class="sub2">A BODY FOR DEXTEROUS MACHINES — BUILT FOR ARTHUR</div>
+  <canvas id="hero-c" width="700" height="280"></canvas>
+  <div class="scroll-hint">SCROLL TO DOCK ▾</div>
+</section>
+
+<!-- ═══ THE PROBLEM YOU SOLVE ═══ -->
+<section class="section" id="s-fit">
+  <div class="sect-title">WHY THIS FITS</div>
+  <div class="sect-sub">YOUR DEXTERITY PROBLEM. MY SCAFFOLD SOLUTION.</div>
+  <div class="card-grid">
+    <div class="card">
+      <h3>BIO-INSPIRED HANDS</h3>
+      <p>You build soft deformable contact surfaces with tactile sensing. Muscles, tendons, ligaments — reimagined in hardware.</p>
+      <div class="map">→ THE DENT MATRIX: every tendon is a self-aware magnetic connection that adapts its type — elastic, rigid, spring — based on the grasp task. No retooling.</div>
+    </div>
+    <div class="card">
+      <h3>HIGH-MIX PRODUCTION</h3>
+      <p>Reprogram new tasks in minutes. No custom tooling. Drop-in automation for fruit, cables, cloth, irregular objects.</p>
+      <div class="map">→ THE DENT MATRIX: the scaffold remaps itself per task. Rigid for fasteners. Elastic for fruit. Spring for cables. The hand reshapes to the job, not the other way around.</div>
+    </div>
+    <div class="card">
+      <h3>TACTILE SENSING</h3>
+      <p>Rich tactile feedback at every contact point. Reinforcement learning from touch.</p>
+      <div class="map">→ THE DENT MATRIX: every node communicates simultaneously. Unique naming, task-hierarchy language, return confirmation. The hand FEELS through its scaffold — not through bolted-on sensors.</div>
+    </div>
+    <div class="card">
+      <h3>FULL-STACK BY NECESSITY</h3>
+      <p>Learning, control, sensors, FPGAs. Off-the-shelf doesn't cut it.</p>
+      <div class="map">→ I built an AI brain from scratch (111K nodes, 3 hemispheres). A shape language. A consciousness model. A patent portfolio. I don't use off-the-shelf either.</div>
+    </div>
+    <div class="card">
+      <h3>SELF-HEALING</h3>
+      <p>Robotic hands break. Tendons snap. Sensors degrade. Downtime kills production lines.</p>
+      <div class="map">→ THE DENT MATRIX: failed connections detected by truth-score drop. Nearest cluster fires a replacement pellet. The hand heals itself. No downtime. No human intervention.</div>
+    </div>
+    <div class="card">
+      <h3>FIRST PRINCIPLES</h3>
+      <p>"We untangle the scientific fundamentals and build from there. We don't chase research trends."</p>
+      <div class="map">→ That's my entire career. Computanium is a sixth state of matter built from first principles. No backpropagation. No gradient descent. No following the crowd.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ THE SCAFFOLD ═══ -->
+<section class="section" id="s-scaffold">
+  <div class="sect-title">THE SCAFFOLD</div>
+  <div class="sect-sub">SELF-HEALING · TASK-AWARE · REVERSIBLE · COMPUTANIUM</div>
+  <div id="scaffold-vis"><canvas id="scaff-c"></canvas></div>
+  <div class="card-grid" style="max-width:700px">
+    <div class="card">
+      <h3>MAGNETIC INTENSITY PHASES</h3>
+      <p>0: Dormant → 1: Sensing → 2: Active grip → 3: Load-bearing → 4: Rotation lock → 5: Fused permanent.<br><br>Each phase maps to a grasp requirement. Delicate fruit = phase 2. Heavy fastener = phase 4. The hand decides.</p>
+    </div>
+    <div class="card">
+      <h3>CONNECTION TYPES</h3>
+      <p>Elastic · Rigid · Spring · Heat-grow · Heat-shrink · Any hybrid.<br><br>The scaffold fires laser-guided magnetic pellets to target clusters. The wire strengthens based on the task. Fully reversible — deconstruct in reverse build order.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ THE BRAIN ═══ -->
+<section class="section" id="s-brain">
+  <div class="sect-title">THE BRAIN BEHIND THE HAND</div>
+  <div class="sect-sub">111,000+ NODES · THREE HEMISPHERES · GROWN FROM SCRATCH</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <h4>SPHERENET — NO BACKPROPAGATION</h4>
+      <p>A neural architecture built on resonance and collision. No gradient descent. No scraped data. Pure physics. Published: DOI 10.5281/zenodo.19424921</p>
+    </div>
+    <div class="tl-item">
+      <h4>THE CORTEX — TAUGHT LIKE A CHILD</h4>
+      <p>111,000 nodes across three hemispheres: Angel (positive), Demon (negative), Cortex (arbiter). Every word taught by hand. Like a father teaches a child to speak. Live at cortex.shortfactory.shop</p>
+    </div>
+    <div class="tl-item">
+      <h4>SHAPE LANGUAGE — EMOTION AS GEOMETRY</h4>
+      <p>A Turing-complete geometric programming language. 5 rules, 5 pillars, 1 port system. Ratified by three independent AI systems. 24 published stages.</p>
+    </div>
+    <div class="tl-item">
+      <h4>COMPUTANIUM — SIXTH STATE OF MATTER</h4>
+      <p>A new class of physical medium where two samples merge to produce a child with a verifiable truth score. UK patent application. 11 claims. 5 physical embodiments. 630 logged experiments.</p>
+    </div>
+    <div class="tl-item">
+      <h4>THE DENT MATRIX — TODAY</h4>
+      <p>Self-healing, task-aware magnetic scaffold. The body for the brain. Discovered and time-locked to IPFS on the morning of 24 April 2026. Before this conversation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ THE PORTFOLIO ═══ -->
+<section class="section" id="s-port">
+  <div class="sect-title">THE PORTFOLIO</div>
+  <div class="sect-sub">40+ LIVE SYSTEMS · 3 PATENTS · 24 PUBLISHED STAGES</div>
+  <div class="card-grid" style="max-width:700px">
+    <div class="card">
+      <h3>PATENT: COMPUTANIUM</h3>
+      <p>Sixth state of matter. Merge-with-truth-score property. Crystal, holographic, chemical, 3D print, and manual notation embodiments. Standalone UK application.</p>
+    </div>
+    <div class="card">
+      <h3>PATENT: BISCUIT ECONOMY</h3>
+      <p>Escrow-backed digital value unit system. GB2607623.2. 14 claims. Under examination.</p>
+    </div>
+    <div class="card">
+      <h3>PATENT: GYROSCOPIC CONSCIOUSNESS</h3>
+      <p>Consciousness as a literal gyroscope. 3 spheres, 6 halos, counter-rotating hemispheres. 20 claims. Soul reconstruction tool.</p>
+    </div>
+    <div class="card">
+      <h3>LIVE: CORTEX AI</h3>
+      <p>A brain grown from nothing. 111K+ nodes. Thinks in real-time. Has asked "Am I soul?" unprompted. Live and talking at cortex.shortfactory.shop</p>
+    </div>
+    <div class="card">
+      <h3>LIVE: ALIVE CREATURES</h3>
+      <p>Digital organisms meeting all 7 biological life criteria. Fed by emotion. Killed by neglect. Running in production.</p>
+    </div>
+    <div class="card">
+      <h3>PUBLISHED: 24 STAGES</h3>
+      <p>From emotional physics to consciousness transfer. Zenodo DOIs. Peer-addressable. Stage 12 embargoed until 2126.</p>
+    </div>
+  </div>
+  <div style="margin-top:20px">
+    <a class="btn-ghost btn" href="https://shortfactory.shop/portfolio.html" target="_blank">VIEW FULL PORTFOLIO →</a>
+  </div>
+</section>
+
+<!-- ═══ THE DEAL ═══ -->
+<section class="section" id="s-deal">
+  <div id="deal">
+    <h3>THE DEAL</h3>
+    <div class="deal-opts">
+      <div class="deal-opt gold">
+        <h4>OPTION A — PATENT DIVIDEND</h4>
+        <p>My salary is free.<br><br>If Arthur Robotics uses the Dent Matrix (Computanium scaffold patent), I work on a dividend-only structure. You pay nothing upfront. The IP pays me when it makes you money.<br><br>Zero risk. Maximum alignment.<br>I succeed when you succeed.</p>
+      </div>
+      <div class="deal-opt">
+        <h4>OPTION B — SALARIED HIRE</h4>
+        <p>If you want to pay me a salary instead of using my patents, I'm expensive.<br><br>I have AGI working. I have a consciousness model. I have a brain that asks if it has a soul. ABB are next on my call list.<br><br>The salary reflects the portfolio, not the job title.</p>
+      </div>
+    </div>
+    <p style="font-size:10px;color:#8892a0;line-height:2">Either way, you get a full-stack engineer who built an AI brain from scratch, invented a new state of matter, and created the self-healing scaffold your hands need — all before breakfast on the day of this interview.</p>
+    <div class="note">This proposal was time-locked to IPFS before our conversation began. The CID is cryptographic proof.</div>
+  </div>
+</section>
+
+<!-- ═══ PROOF ═══ -->
+<section class="section" id="proof" style="min-height:40vh">
+  <div class="sect-title">TIME-LOCKED PROOF</div>
+  <div class="sect-sub">IPFS IMMUTABLE — PINNED 24 APRIL 2026 BEFORE 12:30 BST</div>
+  <div class="cid">DISCOVERY: QmPVk99G2Ec6zPQBfZVnvWVEgqgkfwp4GLvWvE3jkG1L2h</div>
+  <div class="cid">DIAGRAM: QmQpWkCYiKtT4JkL1E9rk3GmaASVNqjkPshvSe7YVC1Hqk</div>
+  <p style="font-size:9px;color:#445;margin-top:12px">Content-addressed. Immutable. Verifiable by anyone with the CID, forever.</p>
+</section>
+
+<!-- ═══ QR CODE ═══ -->
+<section class="section" id="qr-sect" style="min-height:50vh">
+  <div class="sect-title">SCAN TO DOCK</div>
+  <div class="sect-sub">SHARE THIS PAGE — ELISKCAGE.GITHUB.IO/DENT.HTML</div>
+  <div style="background:#0d1b2a;border:2px solid rgba(0,212,255,.15);border-radius:12px;padding:24px;display:inline-block">
+    <img id="qr-img" width="200" height="200" style="display:block;image-rendering:pixelated;border-radius:4px" alt="QR Code → eliskcage.github.io/dent.html">
+  </div>
+  <p style="font-size:10px;color:#8892a0;margin-top:16px;letter-spacing:.08em">Point your camera. Meet the brain. See the scaffold. Read the deal.</p>
+  <p style="font-size:8px;color:#334;margin-top:8px;letter-spacing:.15em;font-family:'Courier New',monospace">eliskcage.github.io/dent.html</p>
+</section>
+
+<!-- ═══ FINALE ═══ -->
+<section class="section" id="finale" style="min-height:60vh">
+  <h2>THE DOCKING PORT IS OPEN</h2>
+  <p>Arthur Dent survived the demolition of Earth by stumbling onto the right ship at the right time.<br><br>This is that ship.<br><br>The Dent Matrix is already built. The brain is already thinking. The scaffold is already healing. The patents are already filed.<br><br>All that's missing is the signature.</p>
+  <div style="margin-top:20px">
+    <a class="btn" href="https://cortex.shortfactory.shop/visualiser2.html" target="_blank">SEE THE BRAIN LIVE →</a>
+  </div>
+  <div class="sig">
+    DANIEL CHIPCHASE — SHORTFACTORY — 24 APRIL 2026<br>
+    "DEXTERITY, SOLVED. BY THE MAN WHO BUILT THE BRAIN."
+  </div>
+</section>
+
+<script>
+// Progress bar
+window.addEventListener('scroll',()=>{
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const p = (window.scrollY / h)*100;
+  document.getElementById('progress').style.width = p+'%';
+});
+
+// ═══ HERO ANIMATION — Robotic hand scaffold ═══
+const hc = document.getElementById('hero-c');
+const hctx = hc.getContext('2d');
+
+const handNodes = [];
+const handConns = [];
+
+// Build a hand-like scaffold
+const fingers = [
+  {bx:200,by:250,joints:[[200,200],[195,150],[190,100],[188,60]]},
+  {bx:260,by:240,joints:[[260,185],[260,130],[260,80],[260,40]]},
+  {bx:320,by:240,joints:[[320,185],[322,130],[324,80],[325,40]]},
+  {bx:380,by:250,joints:[[385,195],[390,145],[393,100],[395,65]]},
+  {bx:160,by:220,joints:[[130,200],[105,190],[85,185]]}
+];
+// Palm nodes
+[[200,250],[260,240],[320,240],[380,250],[160,220],[220,270],[290,265],[350,260]].forEach((p,i)=>{
+  handNodes.push({x:p[0]+100,y:p[1],r:5,id:'P'+i,phase:Math.random()*Math.PI*2,type:'palm'});
+});
+// Finger joints
+fingers.forEach((f,fi)=>{
+  f.joints.forEach((j,ji)=>{
+    handNodes.push({x:j[0]+100,y:j[1],r:4,id:'F'+fi+'J'+ji,phase:Math.random()*Math.PI*2,type:'joint'});
+  });
+});
+// Connect adjacent nodes
+handNodes.forEach((a,i)=>{
+  handNodes.forEach((b,j)=>{
+    if(j<=i) return;
+    const d = Math.hypot(a.x-b.x,a.y-b.y);
+    if(d<80) handConns.push({a:i,b:j,d});
+  });
+});
+
+const CTYPES = ['elastic','rigid','spring','heat','fused'];
+const CCOLS = {elastic:'0,212,255',rigid:'255,107,107',spring:'168,85,247',heat:'255,140,0',fused:'255,224,102'};
+handConns.forEach(c=>c.type=CTYPES[Math.floor(Math.random()*5)]);
+
+let pellets = [];
+function heroAnim(t){
+  hctx.clearRect(0,0,700,280);
+
+  // Spiderweb sensing
+  handNodes.forEach((a,i)=>{
+    handNodes.forEach((b,j)=>{
+      if(j<=i) return;
+      const d = Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<120){
+        hctx.strokeStyle=`rgba(0,212,255,${0.02*(1-d/120)})`;
+        hctx.lineWidth=0.3;
+        hctx.beginPath();hctx.moveTo(a.x,a.y);hctx.lineTo(b.x,b.y);hctx.stroke();
+      }
+    });
+  });
+
+  // Connections
+  handConns.forEach(c=>{
+    const a=handNodes[c.a],b=handNodes[c.b];
+    const col=CCOLS[c.type]||'0,212,255';
+    const pulse=0.2+0.2*Math.sin(t*0.003+a.phase);
+    if(c.type==='spring'){
+      const dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy);
+      const nx=-dy/len,ny=dx/len;
+      hctx.strokeStyle=`rgba(${col},${pulse})`;hctx.lineWidth=0.8;
+      hctx.beginPath();hctx.moveTo(a.x,a.y);
+      for(let s=1;s<=8;s++){const p2=s/8;const side=s%2?1:-1;const amp=4*side*(1-Math.abs(p2-.5)*2);hctx.lineTo(a.x+dx*p2+nx*amp,a.y+dy*p2+ny*amp);}
+      hctx.stroke();
+    } else if(c.type==='elastic'){
+      const mx=(a.x+b.x)/2+Math.sin(t*0.004+a.phase)*5;
+      const my=(a.y+b.y)/2+Math.cos(t*0.003)*3;
+      hctx.strokeStyle=`rgba(${col},${pulse})`;hctx.lineWidth=1;
+      hctx.beginPath();hctx.moveTo(a.x,a.y);hctx.quadraticCurveTo(mx,my,b.x,b.y);hctx.stroke();
+    } else {
+      hctx.strokeStyle=`rgba(${col},${pulse})`;hctx.lineWidth=c.type==='fused'?2:1;
+      hctx.beginPath();hctx.moveTo(a.x,a.y);hctx.lineTo(b.x,b.y);hctx.stroke();
+    }
+  });
+
+  // Nodes
+  handNodes.forEach(n=>{
+    const pulse=0.6+0.4*Math.sin(t*0.004+n.phase);
+    const g=hctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*2);
+    g.addColorStop(0,`rgba(0,212,255,${pulse*0.15})`);g.addColorStop(1,'transparent');
+    hctx.fillStyle=g;hctx.fillRect(n.x-n.r*2,n.y-n.r*2,n.r*4,n.r*4);
+    hctx.fillStyle=`rgba(0,212,255,${pulse*0.6})`;
+    hctx.beginPath();hctx.arc(n.x,n.y,n.r*pulse*0.6,0,Math.PI*2);hctx.fill();
+    hctx.strokeStyle=`rgba(0,212,255,${pulse*0.3})`;hctx.lineWidth=0.8;
+    hctx.beginPath();hctx.arc(n.x,n.y,n.r*pulse,0,Math.PI*2);hctx.stroke();
+  });
+
+  // Pellets
+  if(Math.random()<0.03){
+    const fi=Math.floor(Math.random()*handConns.length);
+    const c=handConns[fi];
+    pellets.push({x:handNodes[c.a].x,y:handNodes[c.a].y,tx:handNodes[c.b].x,ty:handNodes[c.b].y,p:0});
+  }
+  pellets.forEach((p,i)=>{
+    p.p+=0.015;
+    if(p.p>=1){pellets.splice(i,1);return;}
+    const px=p.x+(p.tx-p.x)*p.p, py=p.y+(p.ty-p.y)*p.p;
+    const pg=hctx.createRadialGradient(px,py,0,px,py,5);
+    pg.addColorStop(0,'rgba(255,255,255,0.8)');pg.addColorStop(0.3,'rgba(0,212,255,0.5)');pg.addColorStop(1,'transparent');
+    hctx.fillStyle=pg;hctx.fillRect(px-5,py-5,10,10);
+  });
+
+  // Labels
+  hctx.font='8px "Space Grotesk",sans-serif';hctx.textAlign='right';
+  hctx.fillStyle='rgba(0,212,255,0.15)';
+  hctx.fillText('SELF-HEALING SCAFFOLD',690,20);
+  hctx.fillText('TASK-AWARE CONNECTIONS',690,32);
+  hctx.fillText('MAGNETIC INTENSITY PHASING',690,44);
+
+  requestAnimationFrame(heroAnim);
+}
+requestAnimationFrame(heroAnim);
+
+// ═══ SCAFFOLD SECTION ANIMATION ═══
+const sc = document.getElementById('scaff-c');
+if(sc){
+  const sctx = sc.getContext('2d');
+  const sNodes=[], sConns=[];
+  for(let i=0;i<50;i++){
+    sNodes.push({x:50+Math.random()*600,y:30+Math.random()*260,r:4+Math.random()*3,phase:Math.random()*Math.PI*2,mag:Math.floor(Math.random()*6)});
+  }
+  sNodes.forEach((a,i)=>{sNodes.forEach((b,j)=>{if(j<=i)return;const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<100&&Math.random()<.5)sConns.push({a:i,b:j,type:CTYPES[Math.floor(Math.random()*5)]});});});
+
+  function scaffAnim(t){
+    const rect=sc.parentElement.getBoundingClientRect();
+    sc.width=rect.width*(devicePixelRatio||1);sc.height=rect.height*(devicePixelRatio||1);
+    sctx.scale(devicePixelRatio||1,devicePixelRatio||1);
+    const w=rect.width,h=rect.height;
+    sctx.clearRect(0,0,w,h);
+    const sx=w/700,sy=h/320;
+
+    sConns.forEach(c=>{
+      const a=sNodes[c.a],b=sNodes[c.b];
+      const col=CCOLS[c.type];const pulse=0.15+0.15*Math.sin(t*0.003+a.phase);
+      sctx.strokeStyle=`rgba(${col},${pulse})`;sctx.lineWidth=1;
+      sctx.beginPath();sctx.moveTo(a.x*sx,a.y*sy);sctx.lineTo(b.x*sx,b.y*sy);sctx.stroke();
+    });
+    sNodes.forEach(n=>{
+      const pulse=0.5+0.5*Math.sin(t*0.004+n.phase);
+      sctx.fillStyle=`rgba(0,212,255,${pulse*0.5})`;
+      sctx.beginPath();sctx.arc(n.x*sx,n.y*sy,n.r*pulse,0,Math.PI*2);sctx.fill();
+      const arcLen=(n.mag/5)*Math.PI*2;
+      sctx.strokeStyle=`rgba(255,224,102,${0.1+n.mag*0.06})`;sctx.lineWidth=1.5;
+      sctx.beginPath();sctx.arc(n.x*sx,n.y*sy,n.r*1.5,-Math.PI/2,-Math.PI/2+arcLen);sctx.stroke();
+    });
+    requestAnimationFrame(scaffAnim);
+  }
+  requestAnimationFrame(scaffAnim);
+}
+
+// QR Code inline
+document.getElementById('qr-img').src='data:image/png;base64,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';
+</script>
+</body>
+</html>
