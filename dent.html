@@ -900,8 +900,8 @@ let musicOn=false;
     const prox=Math.max(0,1-dist/(window.innerHeight*1.2));
     grokAudios.forEach(a=>{if(a)a.volume=prox;});
     if(!musicOn)return;
-    if(bgMovie) bgMovie.volume=prox*0.5;
-    if(bgZen) bgZen.volume=(1-prox)*0.4;
+    if(bgMovie) bgMovie.volume=prox*0.25;
+    if(bgZen) bgZen.volume=(1-prox)*0.2;
   });
 })();
 
@@ -1057,7 +1057,7 @@ function toggleAmbient(){
     if(!ambientCtx) createAmbient();
     else masterGain.gain.setTargetAtTime(0.7,ambientCtx.currentTime,1);
     if(ambientCtx.state==='suspended') ambientCtx.resume();
-    if(bgMovie){bgMovie.volume=0.4;bgMovie.play().catch(()=>{});}
+    if(bgMovie){bgMovie.volume=0.2;bgMovie.play().catch(()=>{});}
     if(bgZen){bgZen.volume=0;bgZen.play().catch(()=>{});}
     window.dispatchEvent(new Event('scroll'));
     btn.textContent='◉';btn.classList.add('active');
