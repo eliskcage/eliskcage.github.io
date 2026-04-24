@@ -151,6 +151,7 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
     <audio id="grok-v1" preload="auto" src="grok-intro.mp3"></audio>
     <audio id="grok-v2" preload="auto" src="grok-intro2.mp3"></audio>
     <audio id="grok-v3" preload="auto" src="grok-intro3.mp3"></audio>
+    <audio id="bg-music" preload="auto" loop src="origami-bg-music.mp3"></audio>
     <div id="intro-overlay">
       <div class="io-line io-brand" id="io0">SHORTFACTORY</div>
       <div class="io-line io-x" id="io1">×</div>
@@ -885,14 +886,16 @@ if(sc){
 // ═══ PROXIMITY VOLUME — louder near hero, fades as you scroll away ═══
 (function(){
   const wrap=document.getElementById('hero-vid-wrap');
-  const audios=[document.getElementById('grok-v1'),document.getElementById('grok-v2'),document.getElementById('grok-v3')];
+  const grokAudios=[document.getElementById('grok-v1'),document.getElementById('grok-v2'),document.getElementById('grok-v3')];
+  const bgMusic=document.getElementById('bg-music');
   if(!wrap)return;
   window.addEventListener('scroll',()=>{
     const r=wrap.getBoundingClientRect();
     const center=r.top+r.height/2;
     const dist=Math.abs(center-window.innerHeight/2);
-    const vol=Math.max(0,1-dist/(window.innerHeight*1.2));
-    audios.forEach(a=>{if(a)a.volume=vol;});
+    const proxVol=Math.max(0,1-dist/(window.innerHeight*1.2));
+    grokAudios.forEach(a=>{if(a)a.volume=proxVol;});
+    if(bgMusic&&bgMusic._bgOn) bgMusic.volume=0.25+proxVol*0.35;
   });
 })();
 
@@ -1041,15 +1044,18 @@ function createAmbient(){
 
 function toggleAmbient(){
   const btn=document.getElementById('sound-btn');
+  const bgMusic=document.getElementById('bg-music');
   if(!ambientOn){
     ambientOn=true;
     if(!ambientCtx) createAmbient();
     else masterGain.gain.setTargetAtTime(0.7,ambientCtx.currentTime,1);
     if(ambientCtx.state==='suspended') ambientCtx.resume();
+    if(bgMusic){bgMusic._bgOn=true;bgMusic.volume=0.45;bgMusic.play().catch(()=>{});}
     btn.textContent='SOUND OFF';btn.classList.add('active');
   } else {
     ambientOn=false;
     masterGain.gain.setTargetAtTime(0,ambientCtx.currentTime,1);
+    if(bgMusic){bgMusic._bgOn=false;bgMusic.pause();}
     btn.textContent='SOUND ON';btn.classList.remove('active');
   }
 }
