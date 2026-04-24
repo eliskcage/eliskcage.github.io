@@ -243,7 +243,7 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
   <div class="sect-title">SCAN TO DOCK</div>
   <div class="sect-sub">SHARE THIS PAGE — ELISKCAGE.GITHUB.IO/DENT.HTML</div>
   <div style="background:#0d1b2a;border:2px solid rgba(0,212,255,.15);border-radius:12px;padding:24px;display:inline-block">
-    <img id="qr-img" width="200" height="200" style="display:block;image-rendering:pixelated;border-radius:4px" alt="QR Code → eliskcage.github.io/dent.html">
+    <canvas id="qr-canvas" width="200" height="200" style="display:block;border-radius:4px"></canvas>
   </div>
   <p style="font-size:10px;color:#8892a0;margin-top:16px;letter-spacing:.08em">Point your camera. Meet the brain. See the scaffold. Read the deal.</p>
   <p style="font-size:8px;color:#334;margin-top:8px;letter-spacing:.15em;font-family:'Courier New',monospace">eliskcage.github.io/dent.html</p>
@@ -423,8 +423,34 @@ if(sc){
   requestAnimationFrame(scaffAnim);
 }
 
-// QR Code inline
-document.getElementById('qr-img').src='data:image/png;base64,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';
+// QR Code — fetch from API and recolor to Arthur brand
+(function(){
+  const url='https://eliskcage.github.io/dent.html';
+  const c=document.getElementById('qr-canvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  c.width=200;c.height=200;
+  ctx.fillStyle='#0d1b2a';ctx.fillRect(0,0,200,200);
+  const img=new Image();
+  img.crossOrigin='anonymous';
+  img.onload=function(){
+    ctx.drawImage(img,0,0,200,200);
+    const id=ctx.getImageData(0,0,200,200);
+    const d=id.data;
+    for(let i=0;i<d.length;i+=4){
+      if((d[i]+d[i+1]+d[i+2])/3<128){d[i]=0;d[i+1]=212;d[i+2]=255;}
+      else{d[i]=13;d[i+1]=27;d[i+2]=42;}
+      d[i+3]=255;
+    }
+    ctx.putImageData(id,0,0);
+  };
+  img.onerror=function(){
+    ctx.fillStyle='#00d4ff';ctx.font='bold 12px "Space Grotesk",sans-serif';ctx.textAlign='center';
+    ctx.fillText('eliskcage.github.io',100,90);ctx.fillText('/dent.html',100,110);
+    ctx.strokeStyle='rgba(0,212,255,0.3)';ctx.lineWidth=2;ctx.strokeRect(10,10,180,180);
+  };
+  img.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent(url);
+})();
 </script>
 </body>
 </html>
