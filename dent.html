@@ -142,6 +142,9 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
     <video id="hero-vid" autoplay muted loop playsinline style="width:100%;display:block;border-radius:8px">
       <source src="dent-intro.mp4" type="video/mp4">
     </video>
+    <video id="mesh-vid2" muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:8px;opacity:0;transition:opacity 1.5s">
+      <source src="dent-mesh.mp4" type="video/mp4">
+    </video>
     <video id="origami-vid" muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:8px;opacity:0;transition:opacity 1.5s">
       <source src="grok-origami-slow.mp4" type="video/mp4">
     </video>
@@ -964,34 +967,33 @@ function createAmbient(){
   const v1=document.getElementById('grok-v1');
   const v2=document.getElementById('grok-v2');
   const v3=document.getElementById('grok-v3');
+  const heroVid=document.getElementById('hero-vid');
+  const meshVid2=document.getElementById('mesh-vid2');
   const origVid=document.getElementById('origami-vid');
-  const meshVid=document.getElementById('hero-vid');
   let userInteracted=false;
   document.addEventListener('click',()=>{userInteracted=true;},{once:true});
   document.addEventListener('touchstart',()=>{userInteracted=true;},{once:true});
 
-  function tryPlay(audio){
-    if(!audio)return;
-    audio.currentTime=0;
-    audio.play().catch(()=>{});
-  }
+  function tryPlay(a){if(!a)return;a.currentTime=0;a.play().catch(()=>{});}
+  function showVid(v){if(v){v.currentTime=0;v.style.opacity='1';v.play().catch(()=>{});}}
+  function hideVid(v){if(v){v.style.opacity='0';v.pause();}}
 
-  // Timings matched to audio durations:
-  // v1=12s (phases 0-3), v2=19s (phases 6-10), v3=10s (phases 12-13)
+  // 3 videos crossfade: hero(dent-intro) → mesh2(dent-mesh) → origami
+  // v1=12s (phases 0-3), v2=19s (phases 5-10), v3=10s (phases 12-13)
   const phases=[
-    {show:[0],audio:v1,       t:2500},  // SHORTFACTORY + start voice 1
+    {show:[0],audio:v1,       t:2500},  // SHORTFACTORY + voice 1
     {show:[0,1],              t:1500},  // ×
     {show:[0,1,2],            t:2500},  // ARTHUR ROBOTICS
     {show:[0,1,2,3],          t:5500},  // A UNIFIED FORCE (voice finishes)
-    {fade:[0,1,2,3],          t:1200},  // fade out names
-    {reveal:true, show:[4],   t:3000},  // reveal mesh video + PROTOTYPE READY
-    {fade:[4],show:[5],audio:v2, t:2500}, // CLAUDE + start voice 2
+    {fade:[0,1,2,3],          t:1200},  // fade names
+    {reveal:true,show:[4],vid:'mesh', audio:v2, t:3500}, // reveal + mesh video + voice 2
+    {fade:[4],show:[5],       t:2500},  // CLAUDE
     {show:[5,6],              t:2500},  // + GROK
     {show:[5,6,7],            t:2500},  // + GPT
     {show:[5,6,7,8],          t:3000},  // + COPILOT
-    {fade:[5,6,7,8],show:[9], t:8000},  // GAMIFIED ITERATIONS (voice 2 finishes)
-    {fade:[9],origami:true,   t:2000},  // swap to origami video
-    {show:[10],audio:v3,      t:4500},  // CONCLUDES + start voice 3
+    {fade:[5,6,7,8],show:[9], t:7000},  // GAMIFIED ITERATIONS (voice 2 finishes)
+    {fade:[9],vid:'origami',  t:2000},  // crossfade to origami
+    {show:[10],audio:v3,      t:4500},  // CONCLUDES + voice 3
     {show:[10,11],            t:5500},  // PROCEED (voice 3 finishes)
     {fade:[10,11],            t:1500},  // fade out
     {reset:true,              t:2000}   // pause before loop
@@ -1005,17 +1007,14 @@ function createAmbient(){
       hideAll();
       ov.classList.remove('reveal');
       ov.style.background='';
-      if(origVid){origVid.style.opacity='0';origVid.pause();}
-      if(meshVid)meshVid.play().catch(()=>{});
+      hideVid(meshVid2);hideVid(origVid);
+      heroVid.play().catch(()=>{});
       setTimeout(()=>runPhase(0),p.t);
       return;
     }
     if(p.reveal) ov.classList.add('reveal');
-    if(p.origami && origVid){
-      origVid.currentTime=0;
-      origVid.style.opacity='1';
-      origVid.play().catch(()=>{});
-    }
+    if(p.vid==='mesh'){showVid(meshVid2);hideVid(origVid);}
+    if(p.vid==='origami'){hideVid(meshVid2);showVid(origVid);}
     if(p.audio && userInteracted) tryPlay(p.audio);
     if(p.fade) p.fade.forEach(i=>{if(els[i]){els[i].classList.remove('show');els[i].classList.add('fade');}});
     if(p.show) p.show.forEach(i=>{if(els[i]){els[i].classList.remove('fade');els[i].classList.add('show');}});
