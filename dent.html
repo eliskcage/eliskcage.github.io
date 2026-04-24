@@ -76,6 +76,15 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
 .btn:hover{background:#00a8cc;box-shadow:0 0 20px rgba(0,212,255,.3)}
 .btn-ghost{background:transparent;color:#00d4ff;border:1px solid rgba(0,212,255,.2)}
 .btn-ghost:hover{background:rgba(0,212,255,.05);border-color:#00d4ff}
+
+#pipe-strip{display:flex;overflow-x:auto;gap:0;width:100%;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+#pipe-strip::-webkit-scrollbar{height:3px}
+#pipe-strip::-webkit-scrollbar-thumb{background:#1b263b}
+.pipe-stage{min-width:280px;flex-shrink:0;scroll-snap-align:start;border-right:1px solid rgba(0,212,255,.04);padding:0;display:flex;flex-direction:column;align-items:center}
+.pipe-stage:last-child{border-right:none}
+.pipe-c{width:280px;height:200px;display:block}
+.pipe-label{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:.25em;color:#00d4ff;margin:10px 0 4px;font-weight:600;text-align:center}
+.pipe-desc{font-size:8.5px;line-height:1.9;color:#556;text-align:center;padding:0 16px 16px;max-width:260px}
 </style>
 </head>
 <body>
@@ -104,6 +113,54 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
   </video>
   <canvas id="hero-c" width="700" height="180" style="margin-top:-10px"></canvas>
   <div class="scroll-hint">SCROLL TO DOCK ▾</div>
+</section>
+
+<!-- ═══ DEVELOPMENT PIPELINE ═══ -->
+<section class="section" id="s-pipeline" style="min-height:auto;padding:40px 0 60px">
+  <div class="sect-title">THE DEVELOPMENT PIPELINE</div>
+  <div class="sect-sub">FROM SUBSTRATE TO SCAFFOLD — HOW THE DENT MATRIX WAS ENGINEERED</div>
+  <div id="pipe-strip">
+    <div class="pipe-stage">
+      <canvas class="pipe-c" id="pc0" width="300" height="200"></canvas>
+      <div class="pipe-label">SUBSTRATE</div>
+      <div class="pipe-desc">Raw computational matter. Computanium — a sixth state. Not solid, not liquid. Matter that merges with verifiable truth.</div>
+    </div>
+    <div class="pipe-stage">
+      <canvas class="pipe-c" id="pc1" width="300" height="200"></canvas>
+      <div class="pipe-label">MESH TOPOLOGY</div>
+      <div class="pipe-desc">Hexagonal node grid. Every node uniquely named. Spiderweb awareness — each feels the vibration of the whole.</div>
+    </div>
+    <div class="pipe-stage">
+      <canvas class="pipe-c" id="pc2" width="300" height="200"></canvas>
+      <div class="pipe-label">ENGINEERING THEORY</div>
+      <div class="pipe-desc">Six magnetic phases. Five connection types. Elastic, rigid, spring, thermal, fused. Matched to task by genome vector.</div>
+    </div>
+    <div class="pipe-stage">
+      <canvas class="pipe-c" id="pc3" width="300" height="200"></canvas>
+      <div class="pipe-label">STRESS TESTING</div>
+      <div class="pipe-desc">630 merge experiments logged. Truth scores verified. Every connection type tested under load, heat, vibration, reversal.</div>
+    </div>
+    <div class="pipe-stage">
+      <canvas class="pipe-c" id="pc4" width="300" height="200"></canvas>
+      <div class="pipe-label">SELF-HEALING</div>
+      <div class="pipe-desc">Break a node. Watch the neighbours fire a replacement pellet. T&lt;0.4 triggers repair. T≥0.7 confirms healed. Automatic.</div>
+    </div>
+    <div class="pipe-stage">
+      <canvas class="pipe-c" id="pc5" width="300" height="200"></canvas>
+      <div class="pipe-label">GAMIFICATION</div>
+      <div class="pipe-desc">ALIVE creatures. Shape language. A brain that learns through play. Intelligence through joy, not punishment. Emotion as data.</div>
+    </div>
+    <div class="pipe-stage">
+      <canvas class="pipe-c" id="pc6" width="300" height="200"></canvas>
+      <div class="pipe-label">REVERSE ENGINEERING</div>
+      <div class="pipe-desc">Consciousness modelled as a gyroscope. DNA as shape language. Biology decoded backwards — from soul to substrate.</div>
+    </div>
+    <div class="pipe-stage">
+      <canvas class="pipe-c" id="pc7" width="300" height="200"></canvas>
+      <div class="pipe-label">FIRST PRINCIPLES</div>
+      <div class="pipe-desc">No backpropagation. No scraped data. No following the crowd. Abstract thought nobody else attempts. Evidence, not hubris.</div>
+    </div>
+  </div>
 </section>
 
 <!-- ═══ THE PROBLEM YOU SOLVE ═══ -->
@@ -399,6 +456,295 @@ function heroAnim(t){
   requestAnimationFrame(heroAnim);
 }
 requestAnimationFrame(heroAnim);
+
+// ═══ PIPELINE STAGE ANIMATIONS ═══
+(function(){
+  const PW=280, PH=200;
+  const pCanvases=[];
+  for(let i=0;i<8;i++){
+    const c=document.getElementById('pc'+i);
+    if(c){c.width=PW*2;c.height=PH*2;const ctx=c.getContext('2d');ctx.scale(2,2);pCanvases.push({c,ctx,i});}
+  }
+
+  // Shared helpers
+  function hexGrid(ctx,t,cols,rows,r,cx,cy,col,alpha,phase){
+    for(let row=0;row<rows;row++){
+      for(let c=0;c<cols;c++){
+        const ox=row%2===0?0:r*0.9;
+        const x=cx+c*r*1.8+ox;
+        const y=cy+row*r*1.55;
+        const p=alpha*(0.2+0.3*Math.sin(t*0.003+c*0.5+row*0.7+phase));
+        ctx.strokeStyle=`rgba(${col},${p})`;ctx.lineWidth=0.6;
+        ctx.beginPath();
+        for(let s=0;s<=6;s++){const a=(s/6)*Math.PI*2-Math.PI/6;ctx.lineTo(x+Math.cos(a)*r*0.7,y+Math.sin(a)*r*0.7);}
+        ctx.closePath();ctx.stroke();
+      }
+    }
+  }
+
+  function pipeAnim(t){
+    pCanvases.forEach(({ctx,i})=>{
+      ctx.clearRect(0,0,PW,PH);
+
+      // ─── 0: SUBSTRATE — raw computanium particles forming ───
+      if(i===0){
+        for(let j=0;j<40;j++){
+          const angle=j*0.618*Math.PI*2+t*0.0005;
+          const r2=20+j*1.8+Math.sin(t*0.002+j)*4;
+          const x=PW/2+Math.cos(angle)*r2;
+          const y=PH/2+Math.sin(angle)*r2;
+          const sz=1.5+Math.sin(t*0.004+j)*0.8;
+          const a=0.15+0.25*Math.sin(t*0.003+j*0.5);
+          ctx.fillStyle=`rgba(0,212,255,${a})`;
+          ctx.beginPath();ctx.arc(x,y,sz,0,Math.PI*2);ctx.fill();
+        }
+        // Merge flash
+        const mp=Math.sin(t*0.001)*0.5+0.5;
+        const mg=ctx.createRadialGradient(PW/2,PH/2,0,PW/2,PH/2,30);
+        mg.addColorStop(0,`rgba(255,224,102,${mp*0.12})`);mg.addColorStop(1,'transparent');
+        ctx.fillStyle=mg;ctx.fillRect(PW/2-30,PH/2-30,60,60);
+        ctx.font='7px "Space Grotesk"';ctx.textAlign='center';
+        ctx.fillStyle=`rgba(255,224,102,${mp*0.3})`;ctx.fillText('T = 0.87',PW/2,PH/2+45);
+      }
+
+      // ─── 1: MESH TOPOLOGY — hex grid building ───
+      if(i===1){
+        const buildP=((t*0.0003)%1);
+        const visRows=Math.floor(buildP*8)+1;
+        hexGrid(ctx,t,8,visRows,16,20,20,'0,212,255',0.7,0);
+        // Pulse active nodes
+        for(let r2=0;r2<visRows;r2++){
+          for(let c=0;c<8;c++){
+            if(Math.sin(t*0.005+c+r2*3)>0.7){
+              const ox=r2%2===0?0:14.4;
+              const nx=20+c*28.8+ox, ny=20+r2*24.8;
+              ctx.fillStyle=`rgba(0,212,255,${0.3+0.2*Math.sin(t*0.006+c)})`;
+              ctx.beginPath();ctx.arc(nx,ny,2.5,0,Math.PI*2);ctx.fill();
+            }
+          }
+        }
+        ctx.font='7px "Space Grotesk"';ctx.textAlign='center';
+        ctx.fillStyle='rgba(0,168,204,0.25)';ctx.fillText('N'+Math.floor(buildP*64).toString(16).toUpperCase().padStart(2,'0'),PW/2,PH-12);
+      }
+
+      // ─── 2: ENGINEERING THEORY — connection types demo ───
+      if(i===2){
+        const types=[
+          {y:30,col:'0,212,255',name:'ELASTIC',fn:(x,t2)=>Math.sin(x*0.1+t2*0.004)*8},
+          {y:65,col:'255,107,107',name:'RIGID',fn:()=>0},
+          {y:100,col:'168,85,247',name:'SPRING',fn:(x,t2)=>(Math.floor(x/8)%2?1:-1)*4*(1-Math.abs((x%30)/30-0.5)*2)},
+          {y:135,col:'255,140,0',name:'HEAT',fn:(x,t2)=>Math.sin(x*0.05+t2*0.002)*3*(1+Math.sin(t2*0.001)*2)},
+          {y:170,col:'255,224,102',name:'FUSED',fn:()=>0}
+        ];
+        types.forEach(tp=>{
+          ctx.strokeStyle=`rgba(${tp.col},0.5)`;
+          ctx.lineWidth=tp.name==='RIGID'||tp.name==='FUSED'?2.5:1;
+          ctx.beginPath();
+          for(let x=40;x<PW-40;x++){
+            const y=tp.y+tp.fn(x,t);
+            x===40?ctx.moveTo(x,y):ctx.lineTo(x,y);
+          }
+          ctx.stroke();
+          // End nodes
+          [40,PW-40].forEach(x=>{
+            ctx.fillStyle=`rgba(${tp.col},0.4)`;
+            ctx.beginPath();ctx.arc(x,tp.y,3,0,Math.PI*2);ctx.fill();
+          });
+          ctx.font='6px "Space Grotesk"';ctx.textAlign='left';
+          ctx.fillStyle=`rgba(${tp.col},0.35)`;ctx.fillText(tp.name,PW-36,tp.y+3);
+        });
+        // Mag phase arc
+        const mp2=((t*0.0005)%1)*5;
+        ctx.strokeStyle='rgba(255,224,102,0.2)';ctx.lineWidth=2;
+        ctx.beginPath();ctx.arc(20,PH/2,10,-Math.PI/2,-Math.PI/2+(mp2/5)*Math.PI*2);ctx.stroke();
+      }
+
+      // ─── 3: STRESS TESTING — nodes under strain ───
+      if(i===3){
+        const grid=[];
+        for(let r2=0;r2<5;r2++)for(let c=0;c<7;c++){
+          const shake=Math.sin(t*0.01+r2*c)*2*(Math.sin(t*0.002+c)>0.5?1:0);
+          grid.push({x:40+c*32+shake,y:30+r2*35+shake*0.5,ok:Math.sin(t*0.003+r2+c*2)>-0.3});
+        }
+        grid.forEach((n,ni)=>{
+          grid.forEach((m,mi)=>{
+            if(mi<=ni)return;
+            const d=Math.hypot(n.x-m.x,n.y-m.y);
+            if(d<45){
+              const ok=n.ok&&m.ok;
+              ctx.strokeStyle=ok?`rgba(0,212,255,0.12)`:`rgba(255,60,60,0.2)`;
+              ctx.lineWidth=ok?0.5:1;
+              ctx.setLineDash(ok?[]:[2,2]);
+              ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(m.x,m.y);ctx.stroke();
+              ctx.setLineDash([]);
+            }
+          });
+        });
+        grid.forEach(n=>{
+          ctx.fillStyle=n.ok?'rgba(0,212,255,0.5)':'rgba(255,60,60,0.6)';
+          ctx.beginPath();ctx.arc(n.x,n.y,n.ok?2.5:3,0,Math.PI*2);ctx.fill();
+        });
+        const pass=grid.filter(n=>n.ok).length;
+        ctx.font='7px "Space Grotesk"';ctx.textAlign='center';
+        ctx.fillStyle='rgba(0,212,255,0.3)';ctx.fillText(pass+'/'+grid.length+' PASS',PW/2,PH-10);
+      }
+
+      // ─── 4: SELF-HEALING — break and repair cycle ───
+      if(i===4){
+        const cycle=((t*0.0004)%1);
+        const cx2=PW/2,cy2=PH/2;
+        const nodes4=[];
+        for(let j=0;j<12;j++){
+          const a=(j/12)*Math.PI*2;
+          const r2=45;
+          nodes4.push({x:cx2+Math.cos(a)*r2,y:cy2+Math.sin(a)*r2,j});
+        }
+        nodes4.push({x:cx2,y:cy2,j:12});
+        // Draw connections — one is broken
+        const broken=3;
+        nodes4.forEach((n,ni)=>{
+          nodes4.forEach((m,mi)=>{
+            if(mi<=ni)return;
+            const d=Math.hypot(n.x-m.x,n.y-m.y);
+            if(d<60){
+              const isBroken=(ni===broken||mi===broken)&&cycle<0.5;
+              if(isBroken){
+                ctx.strokeStyle='rgba(255,60,60,0.3)';ctx.setLineDash([2,3]);
+              } else {
+                ctx.strokeStyle='rgba(0,212,255,0.15)';ctx.setLineDash([]);
+              }
+              ctx.lineWidth=0.7;ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(m.x,m.y);ctx.stroke();
+              ctx.setLineDash([]);
+            }
+          });
+        });
+        nodes4.forEach((n,ni)=>{
+          const isBroken=ni===broken&&cycle<0.5;
+          ctx.fillStyle=isBroken?'rgba(255,60,60,0.7)':'rgba(0,212,255,0.5)';
+          ctx.beginPath();ctx.arc(n.x,n.y,3,0,Math.PI*2);ctx.fill();
+        });
+        // Healing pellet
+        if(cycle>=0.3&&cycle<0.6){
+          const hp=(cycle-0.3)/0.3;
+          const from=nodes4[2],to=nodes4[broken];
+          const px=from.x+(to.x-from.x)*hp,py=from.y+(to.y-from.y)*hp;
+          const pg=ctx.createRadialGradient(px,py,0,px,py,5);
+          pg.addColorStop(0,'rgba(0,255,136,0.8)');pg.addColorStop(1,'transparent');
+          ctx.fillStyle=pg;ctx.fillRect(px-5,py-5,10,10);
+        }
+        if(cycle>=0.5){
+          ctx.fillStyle=`rgba(0,255,136,${0.3+0.2*Math.sin(t*0.01)})`;
+          ctx.beginPath();ctx.arc(nodes4[broken].x,nodes4[broken].y,4,0,Math.PI*2);ctx.fill();
+        }
+        ctx.font='7px "Space Grotesk"';ctx.textAlign='center';
+        ctx.fillStyle=cycle<0.5?'rgba(255,60,60,0.4)':'rgba(0,255,136,0.4)';
+        ctx.fillText(cycle<0.5?'T = 0.2 — DAMAGED':'T = 0.91 — HEALED',PW/2,PH-10);
+      }
+
+      // ─── 5: GAMIFICATION — alive creature learning ───
+      if(i===5){
+        const cx3=PW/2,cy3=PH*0.4;
+        // Creature body
+        const breathe=1+0.1*Math.sin(t*0.004);
+        const cr=18*breathe;
+        ctx.fillStyle=`rgba(0,255,136,${0.2+0.15*Math.sin(t*0.003)})`;
+        ctx.beginPath();
+        for(let s=0;s<=8;s++){
+          const a=(s/8)*Math.PI*2;
+          const d=cr*(1+0.15*Math.sin(a*3+t*0.003));
+          ctx.lineTo(cx3+Math.cos(a)*d,cy3+Math.sin(a)*d);
+        }
+        ctx.closePath();ctx.fill();
+        // Heart
+        const hs2=4*(0.5+0.5*Math.sin(t*0.008));
+        ctx.fillStyle=`rgba(0,255,136,${0.5+0.3*Math.sin(t*0.008)})`;
+        ctx.beginPath();ctx.moveTo(cx3,cy3-hs2*0.3);
+        ctx.bezierCurveTo(cx3+hs2,cy3-hs2,cx3+hs2,cy3+hs2*0.3,cx3,cy3+hs2);
+        ctx.bezierCurveTo(cx3-hs2,cy3+hs2*0.3,cx3-hs2,cy3-hs2,cx3,cy3-hs2*0.3);ctx.fill();
+        // Emotion shapes orbiting
+        const emos=[{sides:3,hue:0},{sides:32,hue:50},{sides:5,hue:270},{sides:4,hue:220}];
+        emos.forEach((e,ei)=>{
+          const ea=(ei/4)*Math.PI*2+t*0.001;
+          const er=40+Math.sin(t*0.002+ei)*5;
+          const ex=cx3+Math.cos(ea)*er,ey=cy3+Math.sin(ea)*er;
+          ctx.strokeStyle=`hsla(${e.hue},60%,55%,0.35)`;ctx.lineWidth=0.8;
+          ctx.beginPath();
+          for(let s=0;s<=e.sides;s++){const sa=(s/e.sides)*Math.PI*2+t*0.002;ctx.lineTo(ex+Math.cos(sa)*5,ey+Math.sin(sa)*5);}
+          ctx.closePath();ctx.stroke();
+        });
+        // Absorbed shapes falling in
+        const absorb=Math.floor(((t*0.0005)%1)*4);
+        for(let j=0;j<absorb;j++){
+          const aa=(j/4)*Math.PI*2+0.4;
+          ctx.fillStyle=`hsla(${emos[j].hue},60%,55%,0.15)`;
+          ctx.beginPath();ctx.arc(cx3+Math.cos(aa)*12,cy3+Math.sin(aa)*12,3,0,Math.PI*2);ctx.fill();
+        }
+        ctx.font='7px "Space Grotesk"';ctx.textAlign='center';
+        ctx.fillStyle='rgba(0,255,136,0.25)';ctx.fillText('LEARNING THROUGH PLAY',PW/2,PH-10);
+      }
+
+      // ─── 6: REVERSE ENGINEERING — gyroscope/DNA decode ───
+      if(i===6){
+        const cx4=PW/2,cy4=PH*0.45;
+        // Gyroscope rings
+        [{r:50,speed:0.001,tilt:0.3,col:'255,100,100'},{r:38,speed:-0.0015,tilt:0.5,col:'100,200,255'},{r:25,speed:0.002,tilt:0.2,col:'218,165,32'}].forEach(ring=>{
+          ctx.strokeStyle=`rgba(${ring.col},0.2)`;ctx.lineWidth=1;
+          ctx.beginPath();ctx.ellipse(cx4,cy4,ring.r,ring.r*ring.tilt,t*ring.speed,0,Math.PI*2);ctx.stroke();
+        });
+        // Soul dot
+        const sp2=0.3+0.3*Math.sin(t*0.002);
+        const sg=ctx.createRadialGradient(cx4,cy4,0,cx4,cy4,10);
+        sg.addColorStop(0,`rgba(255,255,255,${sp2})`);sg.addColorStop(1,'transparent');
+        ctx.fillStyle=sg;ctx.fillRect(cx4-10,cy4-10,20,20);
+        // DNA helix at bottom
+        for(let x=20;x<PW-20;x+=2){
+          const y1=PH-25+Math.sin(x*0.04+t*0.002)*8;
+          const y2=PH-25-Math.sin(x*0.04+t*0.002)*8;
+          ctx.fillStyle=`rgba(168,85,247,${0.15+0.1*Math.sin(x*0.02)})`;ctx.fillRect(x,y1,1.5,1.5);
+          ctx.fillStyle=`rgba(255,224,102,${0.1+0.05*Math.sin(x*0.02)})`;ctx.fillRect(x,y2,1.5,1.5);
+        }
+        ctx.font='7px "Space Grotesk"';ctx.textAlign='center';
+        ctx.fillStyle='rgba(218,165,32,0.25)';ctx.fillText('SOUL → SUBSTRATE',PW/2,PH-10);
+      }
+
+      // ─── 7: FIRST PRINCIPLES — abstract thought patterns ───
+      if(i===7){
+        // Unique fractal-like thought web — not following any known pattern
+        const cx5=PW/2,cy5=PH/2;
+        const branches=7;
+        for(let b=0;b<branches;b++){
+          const ba=(b/branches)*Math.PI*2+t*0.0003;
+          const depth=3+Math.floor(Math.sin(t*0.001+b)*2);
+          let px2=cx5,py2=cy5;
+          for(let d=0;d<depth;d++){
+            const dr=15+d*12+Math.sin(t*0.002+b+d)*5;
+            const da=ba+Math.sin(t*0.001+d*b)*0.5;
+            const nx=px2+Math.cos(da)*dr;
+            const ny=py2+Math.sin(da)*dr;
+            const a2=0.08+0.12*(1-d/depth);
+            ctx.strokeStyle=`rgba(0,212,255,${a2})`;ctx.lineWidth=0.6;
+            ctx.beginPath();ctx.moveTo(px2,py2);ctx.lineTo(nx,ny);ctx.stroke();
+            ctx.fillStyle=`rgba(255,224,102,${a2*1.5})`;
+            ctx.beginPath();ctx.arc(nx,ny,1.5+Math.sin(t*0.005+d)*0.5,0,Math.PI*2);ctx.fill();
+            px2=nx;py2=ny;
+          }
+        }
+        // Golden center
+        const gp2=0.15+0.1*Math.sin(t*0.002);
+        const gg=ctx.createRadialGradient(cx5,cy5,0,cx5,cy5,20);
+        gg.addColorStop(0,`rgba(255,224,102,${gp2})`);gg.addColorStop(1,'transparent');
+        ctx.fillStyle=gg;ctx.fillRect(cx5-20,cy5-20,40,40);
+        ctx.fillStyle=`rgba(255,224,102,${gp2*2})`;
+        ctx.beginPath();ctx.arc(cx5,cy5,3,0,Math.PI*2);ctx.fill();
+
+        ctx.font='7px "Space Grotesk"';ctx.textAlign='center';
+        ctx.fillStyle='rgba(255,224,102,0.25)';ctx.fillText('EVIDENCE, NOT HUBRIS',PW/2,PH-10);
+      }
+    });
+    requestAnimationFrame(pipeAnim);
+  }
+  requestAnimationFrame(pipeAnim);
+})();
 
 // ═══ SCAFFOLD SECTION ANIMATION ═══
 const sc = document.getElementById('scaff-c');
