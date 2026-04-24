@@ -142,6 +142,12 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
     <video id="hero-vid" autoplay muted loop playsinline style="width:100%;display:block;border-radius:8px">
       <source src="dent-intro.mp4" type="video/mp4">
     </video>
+    <video id="origami-vid" muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:8px;opacity:0;transition:opacity 1.5s">
+      <source src="grok-origami-slow.mp4" type="video/mp4">
+    </video>
+    <audio id="grok-v1" preload="auto" src="grok-intro.mp3"></audio>
+    <audio id="grok-v2" preload="auto" src="grok-intro2.mp3"></audio>
+    <audio id="grok-v3" preload="auto" src="grok-intro3.mp3"></audio>
     <div id="intro-overlay">
       <div class="io-line io-brand" id="io0">SHORTFACTORY</div>
       <div class="io-line io-x" id="io1">×</div>
@@ -950,28 +956,45 @@ function createAmbient(){
   masterGain.gain.setTargetAtTime(0.7,ambientCtx.currentTime,2);
 }
 
-// ═══ INTRO OVERLAY SEQUENCE ═══
+// ═══ INTRO OVERLAY SEQUENCE — synced to Grok voice ═══
 (function(){
   const ov=document.getElementById('intro-overlay');
   if(!ov)return;
   const els=[...Array(12)].map((_,i)=>document.getElementById('io'+i));
+  const v1=document.getElementById('grok-v1');
+  const v2=document.getElementById('grok-v2');
+  const v3=document.getElementById('grok-v3');
+  const origVid=document.getElementById('origami-vid');
+  const meshVid=document.getElementById('hero-vid');
+  let userInteracted=false;
+  document.addEventListener('click',()=>{userInteracted=true;},{once:true});
+  document.addEventListener('touchstart',()=>{userInteracted=true;},{once:true});
 
+  function tryPlay(audio){
+    if(!audio)return;
+    audio.currentTime=0;
+    audio.play().catch(()=>{});
+  }
+
+  // Timings matched to audio durations:
+  // v1=12s (phases 0-3), v2=19s (phases 6-10), v3=10s (phases 12-13)
   const phases=[
-    {show:[0],        t:2200},   // SHORTFACTORY
-    {show:[0,1],      t:1200},   // ×
-    {show:[0,1,2],    t:2000},   // ARTHUR ROBOTICS
-    {show:[0,1,2,3],  t:2500},   // A UNIFIED FORCE
-    {fade:[0,1,2,3],  t:1000},   // fade out names
-    {reveal:true, show:[4], t:4000}, // reveal video + MESH LABEL
-    {fade:[4], show:[5], t:1200},    // CLAUDE
-    {show:[5,6],      t:1200},   // + GROK
-    {show:[5,6,7],    t:1200},   // + GPT
-    {show:[5,6,7,8],  t:1800},   // + COPILOT
-    {fade:[5,6,7,8], show:[9], t:3000}, // GAMIFIED ITERATIONS
-    {fade:[9], show:[10], t:2500},  // CONCLUDES
-    {show:[10,11],    t:3500},   // PROCEED
-    {fade:[10,11],    t:1500},   // fade out
-    {reset:true,      t:1500}    // pause before loop
+    {show:[0],audio:v1,       t:2500},  // SHORTFACTORY + start voice 1
+    {show:[0,1],              t:1500},  // ×
+    {show:[0,1,2],            t:2500},  // ARTHUR ROBOTICS
+    {show:[0,1,2,3],          t:5500},  // A UNIFIED FORCE (voice finishes)
+    {fade:[0,1,2,3],          t:1200},  // fade out names
+    {reveal:true, show:[4],   t:3000},  // reveal mesh video + PROTOTYPE READY
+    {fade:[4],show:[5],audio:v2, t:2500}, // CLAUDE + start voice 2
+    {show:[5,6],              t:2500},  // + GROK
+    {show:[5,6,7],            t:2500},  // + GPT
+    {show:[5,6,7,8],          t:3000},  // + COPILOT
+    {fade:[5,6,7,8],show:[9], t:8000},  // GAMIFIED ITERATIONS (voice 2 finishes)
+    {fade:[9],origami:true,   t:2000},  // swap to origami video
+    {show:[10],audio:v3,      t:4500},  // CONCLUDES + start voice 3
+    {show:[10,11],            t:5500},  // PROCEED (voice 3 finishes)
+    {fade:[10,11],            t:1500},  // fade out
+    {reset:true,              t:2000}   // pause before loop
   ];
 
   function hideAll(){els.forEach(e=>{if(e){e.classList.remove('show','fade');}});}
@@ -982,10 +1005,18 @@ function createAmbient(){
       hideAll();
       ov.classList.remove('reveal');
       ov.style.background='';
+      if(origVid){origVid.style.opacity='0';origVid.pause();}
+      if(meshVid)meshVid.play().catch(()=>{});
       setTimeout(()=>runPhase(0),p.t);
       return;
     }
     if(p.reveal) ov.classList.add('reveal');
+    if(p.origami && origVid){
+      origVid.currentTime=0;
+      origVid.style.opacity='1';
+      origVid.play().catch(()=>{});
+    }
+    if(p.audio && userInteracted) tryPlay(p.audio);
     if(p.fade) p.fade.forEach(i=>{if(els[i]){els[i].classList.remove('show');els[i].classList.add('fade');}});
     if(p.show) p.show.forEach(i=>{if(els[i]){els[i].classList.remove('fade');els[i].classList.add('show');}});
     const next=(idx+1)%phases.length;
