@@ -882,6 +882,20 @@ if(sc){
   img.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent(url);
 })();
 
+// ═══ PROXIMITY VOLUME — louder near hero, fades as you scroll away ═══
+(function(){
+  const wrap=document.getElementById('hero-vid-wrap');
+  const audios=[document.getElementById('grok-v1'),document.getElementById('grok-v2'),document.getElementById('grok-v3')];
+  if(!wrap)return;
+  window.addEventListener('scroll',()=>{
+    const r=wrap.getBoundingClientRect();
+    const center=r.top+r.height/2;
+    const dist=Math.abs(center-window.innerHeight/2);
+    const vol=Math.max(0,1-dist/(window.innerHeight*1.2));
+    audios.forEach(a=>{if(a)a.volume=vol;});
+  });
+})();
+
 // ═══ AMBIENT SYNTH ENGINE — Limitless-style evolving pad ═══
 let ambientCtx=null, ambientOn=false, masterGain=null;
 const AMB_NOTES=[55,65.41,82.41,110,130.81,164.81,220]; // A1,C2,E2,A2,C3,E3,A3
