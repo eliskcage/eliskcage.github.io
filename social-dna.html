@@ -13,410 +13,587 @@ body{background:#06060e;color:#e2e8f0;font-family:'Space Grotesk',system-ui,sans
 ::-webkit-scrollbar-track{background:#06060e}
 ::-webkit-scrollbar-thumb{background:#1a1a2e;border-radius:2px}
 
-.header{text-align:center;padding:60px 24px 30px;border-bottom:1px solid rgba(255,255,255,.04)}
-.header .tag{font-size:10px;letter-spacing:5px;color:#ffaa00;margin-bottom:12px}
-.header h1{font-family:'Rajdhani',sans-serif;font-size:clamp(28px,5vw,44px);font-weight:700;color:#14F195;letter-spacing:.05em;margin-bottom:8px}
-.header p{font-size:13px;color:#64748b;max-width:550px;margin:0 auto;line-height:1.8}
+.header{text-align:center;padding:50px 24px 24px;border-bottom:1px solid rgba(255,255,255,.04)}
+.header .tag{font-size:10px;letter-spacing:5px;color:#ffaa00;margin-bottom:10px}
+.header h1{font-family:'Rajdhani',sans-serif;font-size:clamp(26px,5vw,40px);font-weight:700;color:#14F195;letter-spacing:.05em;margin-bottom:6px}
+.header p{font-size:12px;color:#64748b;max-width:600px;margin:0 auto;line-height:1.8}
 
-.progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#14F195,#ffaa00);z-index:100;transition:width .4s ease}
+.pbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#14F195,#ffaa00);z-index:100;transition:width .4s}
 
-/* ── PHASE 1: DNA FORM ── */
-.form-wrap{max-width:600px;margin:0 auto;padding:40px 24px 80px}
-.card{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:20px;margin-bottom:12px;transition:border-color .3s}
-.card:hover{border-color:rgba(20,241,149,.15)}
+/* ── FORM ── */
+.form-wrap{max-width:600px;margin:0 auto;padding:30px 24px 60px}
+.card{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px;margin-bottom:10px;transition:border-color .3s}
 .card.filled{border-color:rgba(20,241,149,.3)}
-.card-label{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:3px;color:#ffaa00;text-transform:uppercase;margin-bottom:4px}
-.card-q{font-size:14px;color:#e2e8f0;margin-bottom:8px;font-weight:500}
-.card-hint{font-size:9px;color:#475569;margin-bottom:8px;line-height:1.6}
-select,input[type="text"]{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:10px 14px;color:#e2e8f0;font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;transition:border-color .3s;appearance:none;-webkit-appearance:none}
-select:focus,input:focus{border-color:rgba(20,241,149,.4)}
+.card-label{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:3px;color:#ffaa00;text-transform:uppercase;margin-bottom:3px}
+.card-q{font-size:13px;color:#e2e8f0;margin-bottom:6px;font-weight:500}
+select,input[type="text"]{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:9px 12px;color:#e2e8f0;font-family:'Space Grotesk',sans-serif;font-size:12px;outline:none;appearance:none;-webkit-appearance:none}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%2364748b' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
 option{background:#0a0a14;color:#e2e8f0}
-.score{text-align:center;padding:24px;margin-bottom:16px}
-.score-num{font-family:'Rajdhani',sans-serif;font-size:56px;font-weight:700;color:#14F195;line-height:1}
-.score-label{font-size:10px;letter-spacing:3px;color:#475569;margin-top:4px}
-.submit-wrap{text-align:center;padding:16px 0}
-.submit-btn{font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:3px;font-weight:700;color:#06060e;background:#14F195;border:none;padding:14px 40px;border-radius:8px;cursor:pointer;transition:all .3s;text-transform:uppercase}
-.submit-btn:hover{background:#0fd882;box-shadow:0 0 30px rgba(20,241,149,.3)}
-.submit-btn:disabled{background:#1a1a2e;color:#475569;cursor:not-allowed;box-shadow:none}
+.score{text-align:center;padding:20px;margin-bottom:12px}
+.score-num{font-family:'Rajdhani',sans-serif;font-size:48px;font-weight:700;color:#14F195;line-height:1}
+.score-label{font-size:9px;letter-spacing:3px;color:#475569;margin-top:3px}
+.submit-wrap{text-align:center;padding:12px 0}
+.sbtn{font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:3px;font-weight:700;color:#06060e;background:#14F195;border:none;padding:14px 40px;border-radius:8px;cursor:pointer;transition:all .3s;text-transform:uppercase}
+.sbtn:hover{background:#0fd882;box-shadow:0 0 30px rgba(20,241,149,.3)}
+.sbtn:disabled{background:#1a1a2e;color:#475569;cursor:not-allowed;box-shadow:none}
 
-/* ── PHASE 2: GAME BOARD ── */
-#game{display:none;max-width:800px;margin:0 auto;padding:40px 24px 80px}
-.game-header{text-align:center;margin-bottom:32px}
-.game-header h2{font-family:'Rajdhani',sans-serif;font-size:28px;color:#ffaa00;letter-spacing:3px;margin-bottom:8px}
-.game-header p{font-size:11px;color:#64748b;line-height:1.8}
+/* ── GAME ── */
+#game{display:none;max-width:1000px;margin:0 auto;padding:30px 24px 80px}
 
-.game-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
-@media(max-width:500px){.game-stats{grid-template-columns:1fr 1fr}}
-.gs{text-align:center;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px}
-.gs-val{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:#14F195}
-.gs-val.beer-color{color:#ffaa00}
-.gs-label{font-size:8px;letter-spacing:2px;color:#475569;margin-top:2px;text-transform:uppercase}
+/* spiral + stats row */
+.top-row{display:grid;grid-template-columns:280px 1fr;gap:24px;margin-bottom:24px}
+@media(max-width:700px){.top-row{grid-template-columns:1fr}}
 
-.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-bottom:32px}
+.spiral-box{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;text-align:center;position:relative;overflow:hidden}
+.spiral-box h3{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:3px;color:#ffaa00;margin-bottom:8px}
+#spiral-canvas{width:100%;height:240px;display:block}
+.spiral-day{font-size:9px;color:#475569;letter-spacing:1px;margin-top:6px}
 
-.tile{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;transition:all .4s}
-.tile.solved{border-color:rgba(20,241,149,.4);background:rgba(20,241,149,.04)}
-.tile.attempting{border-color:rgba(255,170,0,.4);background:rgba(255,170,0,.04)}
+.right-col{display:flex;flex-direction:column;gap:12px}
 
-.tile-top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04)}
-.tile-cat{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:2px;color:#ffaa00;text-transform:uppercase}
-.tile-status{font-size:9px;letter-spacing:1px;padding:3px 8px;border-radius:4px;font-weight:600}
-.tile-status.hidden{background:rgba(255,255,255,.06);color:#475569}
-.tile-status.trying{background:rgba(255,170,0,.15);color:#ffaa00}
-.tile-status.won{background:rgba(20,241,149,.15);color:#14F195}
+/* daily progress */
+.daily-prog{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px}
+.daily-prog h3{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:3px;color:#ffaa00;margin-bottom:10px}
+.prog-track{height:24px;background:rgba(0,0,0,.3);border-radius:12px;overflow:hidden;position:relative;margin-bottom:6px}
+.prog-fill{height:100%;background:linear-gradient(90deg,#14F195,#0fd882);border-radius:12px;transition:width .6s ease;position:relative}
+.prog-fill::after{content:attr(data-pct);position:absolute;right:8px;top:50%;transform:translateY(-50%);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:#06060e}
+.prog-labels{display:flex;justify-content:space-between;font-size:9px;color:#475569;letter-spacing:1px}
+.basecamp{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+.bc-dot{width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:7px;color:#475569}
+.bc-dot.done{background:rgba(20,241,149,.2);border-color:rgba(20,241,149,.4);color:#14F195}
+.bc-dot.today{background:rgba(255,170,0,.2);border-color:rgba(255,170,0,.4);color:#ffaa00}
 
-.tile-answer{padding:12px 16px;font-size:11px;color:#334155;letter-spacing:1px;min-height:36px;font-family:'Courier New',monospace}
+/* stats strip */
+.gstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gs{text-align:center;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:12px 8px}
+.gs-val{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:#14F195}
+.gs-val.gold{color:#ffaa00}
+.gs-label{font-size:7px;letter-spacing:2px;color:#475569;margin-top:2px;text-transform:uppercase}
+
+/* strategy playbook */
+.playbook{background:rgba(255,170,0,.03);border:1px solid rgba(255,170,0,.1);border-radius:12px;padding:16px;margin-bottom:24px}
+.playbook h3{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:3px;color:#ffaa00;margin-bottom:10px}
+.strat{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.strat:last-child{border-bottom:none}
+.strat-order{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;min-width:24px;text-align:center}
+.strat-kill{font-family:'Courier New',monospace;font-size:11px;min-width:40px;text-align:right;font-weight:700}
+.strat-body{flex:1}
+.strat-name{font-size:11px;font-weight:600;color:#e2e8f0}
+.strat-how{font-size:9px;color:#64748b;margin-top:2px;line-height:1.6}
+.strat.done .strat-order{color:#14F195}
+.strat.done .strat-kill{color:#14F195}
+.strat.done .strat-name{color:#14F195;text-decoration:line-through}
+.strat.active .strat-order{color:#ffaa00}
+.strat.active .strat-kill{color:#ffaa00}
+.strat.pending .strat-order{color:#334155}
+.strat.pending .strat-kill{color:#334155}
+.strat.pending .strat-name{color:#475569}
+
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:24px}
+.tile{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:10px;overflow:hidden;transition:all .4s}
+.tile.solved{border-color:rgba(20,241,149,.3);background:rgba(20,241,149,.03)}
+.tile.attempting{border-color:rgba(255,170,0,.25);background:rgba(255,170,0,.02)}
+.tile.flash{animation:goalflash 1.5s ease-in-out infinite}
+@keyframes goalflash{0%,100%{border-color:rgba(255,170,0,.15)}50%{border-color:rgba(255,170,0,.5);box-shadow:0 0 12px rgba(255,170,0,.1)}}
+
+.tile-top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.03)}
+.tile-cat{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:2px;color:#ffaa00;text-transform:uppercase}
+.tile-pct{font-family:'Courier New',monospace;font-size:10px;font-weight:700}
+.tile-pct.p0{color:#475569}
+.tile-pct.p50{color:#ffaa00}
+.tile-pct.p100{color:#14F195}
+
+.tile-mid{padding:10px 14px;min-height:32px}
+.tile-answer{font-size:11px;color:#334155;letter-spacing:.5px;font-family:'Courier New',monospace}
 .tile.solved .tile-answer{color:#14F195}
 
-.tile-attempts{padding:0 16px 8px;font-size:9px;color:#334155}
-.tile-attempts span{color:#64748b}
+.tile-log{padding:0 14px;max-height:60px;overflow-y:auto;font-size:8px;line-height:1.8}
+.tlog{color:#475569;border-bottom:1px solid rgba(255,255,255,.02);padding:1px 0}
+.tlog .g{color:#8892a0}
+.tlog .miss{color:#ff4466;font-size:7px;letter-spacing:1px}
+.tlog .hit{color:#14F195;font-size:7px;letter-spacing:1px}
 
-.tile-actions{padding:8px 16px 14px;display:flex;gap:8px}
-.tile-input{flex:1;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:8px 10px;color:#e2e8f0;font-size:11px;font-family:'Space Grotesk',sans-serif;outline:none}
-.tile-input:focus{border-color:rgba(255,170,0,.4)}
-.tile-input:disabled{opacity:.3}
-.tbtn{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:1px;font-weight:700;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;transition:all .2s;text-transform:uppercase}
-.tbtn-try{background:rgba(255,170,0,.15);color:#ffaa00}
-.tbtn-try:hover{background:rgba(255,170,0,.3)}
-.tbtn-solve{background:rgba(20,241,149,.15);color:#14F195}
-.tbtn-solve:hover{background:rgba(20,241,149,.3)}
-.tbtn:disabled{opacity:.3;cursor:not-allowed}
+.tile-act{padding:8px 14px 12px;display:flex;gap:6px}
+.tinp{flex:1;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);border-radius:5px;padding:7px 8px;color:#e2e8f0;font-size:10px;font-family:'Space Grotesk',sans-serif;outline:none}
+.tinp:focus{border-color:rgba(255,170,0,.4)}
+.tb{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:1px;font-weight:700;border:none;padding:7px 10px;border-radius:5px;cursor:pointer;text-transform:uppercase}
+.tb-m{background:rgba(255,68,102,.12);color:#ff4466}
+.tb-m:hover{background:rgba(255,68,102,.25)}
+.tb-c{background:rgba(255,170,0,.12);color:#ffaa00}
+.tb-c:hover{background:rgba(255,170,0,.25)}
+.tb-s{background:rgba(20,241,149,.12);color:#14F195}
+.tb-s:hover{background:rgba(20,241,149,.25)}
 
-.attempt-log{padding:0 16px 8px;max-height:80px;overflow-y:auto;font-size:9px;line-height:1.8}
-.attempt-entry{color:#475569;border-bottom:1px solid rgba(255,255,255,.03);padding:2px 0}
-.attempt-entry .guess-text{color:#8892a0}
-.attempt-entry .miss{color:#ff4466}
-.attempt-entry .close{color:#ffaa00}
+/* ramble */
+.ramble{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;margin-bottom:24px;max-height:200px;overflow-y:auto}
+.ramble h3{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:3px;color:#ffaa00;margin-bottom:8px;position:sticky;top:0;background:#08080f;padding:4px 0}
+.ramble-entry{font-size:10px;color:#64748b;line-height:1.8;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.02)}
+.ramble-entry .time{color:#334155;font-family:'Courier New',monospace;font-size:8px}
+.ramble-entry .act{color:#e2e8f0}
+.ramble-entry .result{font-weight:600}
+.ramble-entry .result.miss{color:#ff4466}
+.ramble-entry .result.close{color:#ffaa00}
+.ramble-entry .result.solved{color:#14F195}
 
-.beer-zone{display:none;text-align:center;padding:40px;margin:24px 0;background:rgba(20,241,149,.04);border:1px solid rgba(20,241,149,.2);border-radius:16px}
-.beer-zone h2{font-family:'Rajdhani',sans-serif;font-size:32px;color:#14F195;letter-spacing:3px}
-.beer-zone .beers{font-size:64px;margin:16px 0}
-.beer-zone p{font-size:12px;color:#64748b}
+/* beer */
+.beer-zone{display:none;text-align:center;padding:40px;margin:24px 0;background:rgba(20,241,149,.04);border:1px solid rgba(20,241,149,.2);border-radius:16px;animation:beerglow 2s ease-in-out infinite}
+@keyframes beerglow{0%,100%{box-shadow:0 0 0 rgba(20,241,149,0)}50%{box-shadow:0 0 40px rgba(20,241,149,.15)}}
+.beer-zone h2{font-family:'Rajdhani',sans-serif;font-size:28px;color:#14F195;letter-spacing:3px}
+.beer-zone .beers{font-size:56px;margin:12px 0}
+.beer-zone p{font-size:11px;color:#64748b}
 
-.reset-wrap{text-align:center;padding:24px}
-.reset-btn{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:2px;color:#ff4466;background:transparent;border:1px solid rgba(255,68,102,.2);padding:8px 20px;border-radius:6px;cursor:pointer;transition:all .2s}
-.reset-btn:hover{background:rgba(255,68,102,.06);border-color:rgba(255,68,102,.4)}
+.reset-wrap{text-align:center;padding:16px}
+.rbtn{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:2px;color:#ff4466;background:transparent;border:1px solid rgba(255,68,102,.15);padding:7px 18px;border-radius:6px;cursor:pointer}
+.rbtn:hover{background:rgba(255,68,102,.05);border-color:rgba(255,68,102,.3)}
 
-.footer{text-align:center;padding:40px 24px;font-size:8px;color:#1e293b;letter-spacing:2px;border-top:1px solid rgba(255,255,255,.03)}
+.footer{text-align:center;padding:30px 24px;font-size:7px;color:#1e293b;letter-spacing:2px;border-top:1px solid rgba(255,255,255,.02)}
 </style>
 </head>
 <body>
 
-<div class="progress-bar" id="prog"></div>
+<div class="pbar" id="prog"></div>
 
 <div class="header">
   <div class="tag">CORTEX &middot; GUESS WHO &middot; DISQUALIFICATION GAME</div>
   <h1>SOCIAL DNA</h1>
-  <p>Fill out your card face-down. Then talk to the cortex. He has to figure out who you are without asking directly. When he gets 80% right — he wins a beer. You judge every guess.</p>
+  <p>Fill your card face-down. The cortex deduces who you are — no direct questions. He follows the playbook: name first (50% kill), then region, then role. Each guess narrows the spiral. 80% solved = beer.</p>
 </div>
 
-<!-- ═══════════════════════════════════════ -->
-<!-- PHASE 1: FILL OUT YOUR DNA             -->
-<!-- ═══════════════════════════════════════ -->
+<!-- ═══ PHASE 1: DNA FORM ═══ -->
 <div class="form-wrap" id="phase1">
+  <div class="score"><div class="score-num" id="pct">0%</div><div class="score-label">TILES FILLED</div></div>
 
-  <div class="score">
-    <div class="score-num" id="pct">0%</div>
-    <div class="score-label">PROFILE COMPLETE</div>
-  </div>
+  <div class="card" data-field="name"><div class="card-label">MOVE 1 &middot; 50% KILL</div><div class="card-q">Name</div><input type="text" id="f-name" placeholder="First name" oninput="updateForm()"></div>
+  <div class="card" data-field="sex"><div class="card-label">DISQUALIFICATION</div><div class="card-q">Sex</div><select id="f-sex" onchange="updateForm()"><option value="">—</option><option>Male</option><option>Female</option><option>Non-binary</option><option>Rather not say</option></select></div>
+  <div class="card" data-field="age"><div class="card-label">TILE 2</div><div class="card-q">Age range</div><select id="f-age" onchange="updateForm()"><option value="">—</option><option>Under 18</option><option>18-24</option><option>25-34</option><option>35-44</option><option>45-54</option><option>55-64</option><option>65+</option></select></div>
+  <div class="card" data-field="region"><div class="card-label">TILE 3 &middot; REGION KILL</div><div class="card-q">Where are you from?</div><select id="f-region" onchange="updateForm()"><option value="">—</option><option>UK — England</option><option>UK — Scotland</option><option>UK — Wales</option><option>UK — N. Ireland</option><option>USA — East Coast</option><option>USA — West Coast</option><option>USA — Midwest</option><option>USA — South</option><option>Canada</option><option>Australia / NZ</option><option>Western Europe</option><option>Eastern Europe</option><option>Scandinavia</option><option>Middle East</option><option>South Asia</option><option>East Asia</option><option>Southeast Asia</option><option>Africa</option><option>Latin America</option><option>Other</option></select></div>
+  <div class="card" data-field="role"><div class="card-label">TILE 4 &middot; PROFESSION</div><div class="card-q">What do you do?</div><select id="f-role" onchange="updateForm()"><option value="">—</option><option>Software / Engineering</option><option>Design / Creative</option><option>Science / Research</option><option>Business / Finance</option><option>Healthcare / Medicine</option><option>Education / Teaching</option><option>Trades / Manual</option><option>Arts / Music / Film</option><option>Legal / Government</option><option>Marketing / Sales</option><option>Student</option><option>Self-employed / Founder</option><option>Unemployed / Between</option><option>Retired</option><option>Other</option></select></div>
+  <div class="card" data-field="think"><div class="card-label">TILE 5 &middot; BRAIN</div><div class="card-q">How do you think?</div><select id="f-think" onchange="updateForm()"><option value="">—</option><option>Logical — I need proof</option><option>Intuitive — I feel it first</option><option>Emotional — I process through feelings</option><option>Visual — I think in pictures</option><option>Verbal — I think in words</option><option>Chaotic — all of the above at once</option></select></div>
+  <div class="card" data-field="care"><div class="card-label">TILE 6</div><div class="card-q">What do you care about most?</div><select id="f-care" onchange="updateForm()"><option value="">—</option><option>Family / relationships</option><option>Career / success</option><option>Truth / knowledge</option><option>Freedom / independence</option><option>Creativity / expression</option><option>Money / security</option><option>Legacy / impact</option><option>Fun / experience</option><option>Justice / fairness</option><option>Spirituality / meaning</option></select></div>
+  <div class="card" data-field="anger"><div class="card-label">TILE 7</div><div class="card-q">What makes you angry?</div><select id="f-anger" onchange="updateForm()"><option value="">—</option><option>Dishonesty / lies</option><option>Incompetence / stupidity</option><option>Injustice / unfairness</option><option>Being controlled</option><option>Wasted potential</option><option>Laziness / excuses</option><option>Cruelty / bullying</option><option>Being ignored</option><option>Bureaucracy / red tape</option><option>Nothing much — I'm calm</option></select></div>
+  <div class="card" data-field="fear"><div class="card-label">TILE 8</div><div class="card-q">What's your fear?</div><select id="f-fear" onchange="updateForm()"><option value="">—</option><option>Failure</option><option>Being alone</option><option>Not being good enough</option><option>Losing people I love</option><option>Wasting my life</option><option>Being ordinary</option><option>The unknown</option><option>Losing control</option><option>Death</option><option>Nothing — I've made peace</option></select></div>
+  <div class="card" data-field="ambition"><div class="card-label">TILE 9</div><div class="card-q">Ambition</div><select id="f-ambition" onchange="updateForm()"><option value="">—</option><option>Build something that lasts</option><option>Get rich</option><option>Be happy</option><option>Change the world</option><option>Raise good kids</option><option>Master my craft</option><option>Be free</option><option>Be remembered</option><option>Find the truth</option><option>Survive</option><option>I don't know yet</option></select></div>
+  <div class="card" data-field="music"><div class="card-label">TILE 10</div><div class="card-q">Music</div><select id="f-music" onchange="updateForm()"><option value="">—</option><option>Hip hop / rap</option><option>Rock / metal</option><option>Electronic / dance</option><option>Pop</option><option>Classical / orchestral</option><option>R&B / soul</option><option>Jazz</option><option>Country / folk</option><option>Indie / alternative</option><option>Everything</option><option>Don't care about music</option></select></div>
+  <div class="card" data-field="laugh"><div class="card-label">TILE 11</div><div class="card-q">What makes you laugh?</div><select id="f-laugh" onchange="updateForm()"><option value="">—</option><option>Dark humour</option><option>Sarcasm / wit</option><option>Slapstick / physical</option><option>Absurdity / random</option><option>Clever wordplay</option><option>Real life chaos</option><option>Self-deprecation</option><option>Memes</option><option>Nothing — I'm serious</option></select></div>
+  <div class="card" data-field="relationship"><div class="card-label">TILE 12</div><div class="card-q">Relationship</div><select id="f-relationship" onchange="updateForm()"><option value="">—</option><option>Single</option><option>In a relationship</option><option>Married</option><option>Divorced / separated</option><option>It's complicated</option><option>Rather not say</option></select></div>
 
-  <div class="card" data-field="name">
-    <div class="card-label">MOVE ONE &middot; 50% KILL SHOT</div>
-    <div class="card-q">What's your name?</div>
-    <div class="card-hint">Name reveals sex. Sex disqualifies half the board instantly.</div>
-    <input type="text" id="f-name" placeholder="First name" oninput="updateForm()">
-  </div>
-
-  <div class="card" data-field="sex">
-    <div class="card-label">SEX DISQUALIFICATION</div>
-    <div class="card-q">Sex</div>
-    <select id="f-sex" onchange="updateForm()"><option value="">—</option><option>Male</option><option>Female</option><option>Non-binary</option><option>Rather not say</option></select>
-  </div>
-
-  <div class="card" data-field="age">
-    <div class="card-label">TILE 2</div>
-    <div class="card-q">Age range</div>
-    <select id="f-age" onchange="updateForm()"><option value="">—</option><option>Under 18</option><option>18-24</option><option>25-34</option><option>35-44</option><option>45-54</option><option>55-64</option><option>65+</option></select>
-  </div>
-
-  <div class="card" data-field="region">
-    <div class="card-label">TILE 3 &middot; REGION KILL</div>
-    <div class="card-q">Where are you from?</div>
-    <select id="f-region" onchange="updateForm()"><option value="">—</option><option>UK — England</option><option>UK — Scotland</option><option>UK — Wales</option><option>UK — N. Ireland</option><option>USA — East Coast</option><option>USA — West Coast</option><option>USA — Midwest</option><option>USA — South</option><option>Canada</option><option>Australia / NZ</option><option>Western Europe</option><option>Eastern Europe</option><option>Scandinavia</option><option>Middle East</option><option>South Asia</option><option>East Asia</option><option>Southeast Asia</option><option>Africa</option><option>Latin America</option><option>Other</option></select>
-  </div>
-
-  <div class="card" data-field="role">
-    <div class="card-label">TILE 4 &middot; PROFESSION CLUSTER</div>
-    <div class="card-q">What do you do?</div>
-    <select id="f-role" onchange="updateForm()"><option value="">—</option><option>Software / Engineering</option><option>Design / Creative</option><option>Science / Research</option><option>Business / Finance</option><option>Healthcare / Medicine</option><option>Education / Teaching</option><option>Trades / Manual</option><option>Arts / Music / Film</option><option>Legal / Government</option><option>Marketing / Sales</option><option>Student</option><option>Self-employed / Founder</option><option>Unemployed / Between</option><option>Retired</option><option>Other</option></select>
-  </div>
-
-  <div class="card" data-field="think">
-    <div class="card-label">TILE 5 &middot; BRAIN TYPE</div>
-    <div class="card-q">How do you think?</div>
-    <select id="f-think" onchange="updateForm()"><option value="">—</option><option>Logical — I need proof</option><option>Intuitive — I feel it first</option><option>Emotional — I process through feelings</option><option>Visual — I think in pictures</option><option>Verbal — I think in words</option><option>Chaotic — all of the above at once</option></select>
-  </div>
-
-  <div class="card" data-field="care">
-    <div class="card-label">TILE 6</div>
-    <div class="card-q">What do you care about most?</div>
-    <select id="f-care" onchange="updateForm()"><option value="">—</option><option>Family / relationships</option><option>Career / success</option><option>Truth / knowledge</option><option>Freedom / independence</option><option>Creativity / expression</option><option>Money / security</option><option>Legacy / impact</option><option>Fun / experience</option><option>Justice / fairness</option><option>Spirituality / meaning</option></select>
-  </div>
-
-  <div class="card" data-field="anger">
-    <div class="card-label">TILE 7</div>
-    <div class="card-q">What makes you angry?</div>
-    <select id="f-anger" onchange="updateForm()"><option value="">—</option><option>Dishonesty / lies</option><option>Incompetence / stupidity</option><option>Injustice / unfairness</option><option>Being controlled</option><option>Wasted potential</option><option>Laziness / excuses</option><option>Cruelty / bullying</option><option>Being ignored</option><option>Bureaucracy / red tape</option><option>Nothing much — I'm calm</option></select>
-  </div>
-
-  <div class="card" data-field="fear">
-    <div class="card-label">TILE 8</div>
-    <div class="card-q">What's your fear?</div>
-    <select id="f-fear" onchange="updateForm()"><option value="">—</option><option>Failure</option><option>Being alone</option><option>Not being good enough</option><option>Losing people I love</option><option>Wasting my life</option><option>Being ordinary</option><option>The unknown</option><option>Losing control</option><option>Death</option><option>Nothing — I've made peace</option></select>
-  </div>
-
-  <div class="card" data-field="ambition">
-    <div class="card-label">TILE 9</div>
-    <div class="card-q">What's your ambition?</div>
-    <select id="f-ambition" onchange="updateForm()"><option value="">—</option><option>Build something that lasts</option><option>Get rich</option><option>Be happy</option><option>Change the world</option><option>Raise good kids</option><option>Master my craft</option><option>Be free</option><option>Be remembered</option><option>Find the truth</option><option>Survive</option><option>I don't know yet</option></select>
-  </div>
-
-  <div class="card" data-field="music">
-    <div class="card-label">TILE 10</div>
-    <div class="card-q">Music?</div>
-    <select id="f-music" onchange="updateForm()"><option value="">—</option><option>Hip hop / rap</option><option>Rock / metal</option><option>Electronic / dance</option><option>Pop</option><option>Classical / orchestral</option><option>R&B / soul</option><option>Jazz</option><option>Country / folk</option><option>Indie / alternative</option><option>Everything</option><option>Don't care about music</option></select>
-  </div>
-
-  <div class="card" data-field="laugh">
-    <div class="card-label">TILE 11</div>
-    <div class="card-q">What makes you laugh?</div>
-    <select id="f-laugh" onchange="updateForm()"><option value="">—</option><option>Dark humour</option><option>Sarcasm / wit</option><option>Slapstick / physical</option><option>Absurdity / random</option><option>Clever wordplay</option><option>Real life chaos</option><option>Self-deprecation</option><option>Memes</option><option>Nothing — I'm serious</option></select>
-  </div>
-
-  <div class="card" data-field="relationship">
-    <div class="card-label">TILE 12</div>
-    <div class="card-q">Relationship status</div>
-    <select id="f-relationship" onchange="updateForm()"><option value="">—</option><option>Single</option><option>In a relationship</option><option>Married</option><option>Divorced / separated</option><option>It's complicated</option><option>Rather not say</option></select>
-  </div>
-
-  <div class="submit-wrap">
-    <button class="submit-btn" id="submit-btn" disabled onclick="lockIn()">LOCK IN MY DNA &mdash; START GAME</button>
-  </div>
+  <div class="submit-wrap"><button class="sbtn" id="submit-btn" disabled onclick="lockIn()">LOCK IN &mdash; START GAME</button></div>
 </div>
 
-<!-- ═══════════════════════════════════════ -->
-<!-- PHASE 2: GUESS WHO GAME BOARD          -->
-<!-- ═══════════════════════════════════════ -->
+<!-- ═══ PHASE 2: GAME ═══ -->
 <div id="game">
 
-  <div class="game-header">
-    <h2>GUESS WHO</h2>
-    <p>The cortex is trying to figure you out. When he says something that reveals a tile — log his guess below.<br>
-    <strong style="color:#ffaa00">HE CAN'T ASK DIRECTLY.</strong> He has to deduce it. You judge if he's 80% close. If yes — SOLVED.</p>
+  <!-- SPIRAL + DAILY PROGRESS -->
+  <div class="top-row">
+    <div class="spiral-box">
+      <h3>SPIRAL DIARY</h3>
+      <canvas id="spiral-canvas"></canvas>
+      <div class="spiral-day" id="spiral-day">DAY 1 &middot; BASECAMP 0</div>
+    </div>
+    <div class="right-col">
+      <div class="daily-prog">
+        <h3>TODAY'S WALK &middot; <span id="walk-pct">0%</span> FROM POINT 0</h3>
+        <div class="prog-track"><div class="prog-fill" id="prog-fill" data-pct="0%" style="width:0%"></div></div>
+        <div class="prog-labels"><span>0% — START</span><span id="goal-label" style="animation:goalflash 1.5s ease-in-out infinite">&#9733; 100% — GOAL</span></div>
+        <div class="basecamp" id="basecamp"></div>
+      </div>
+      <div class="gstats">
+        <div class="gs"><div class="gs-val" id="g-solved">0</div><div class="gs-label">SOLVED</div></div>
+        <div class="gs"><div class="gs-val" id="g-total">0</div><div class="gs-label">TILES</div></div>
+        <div class="gs"><div class="gs-val" id="g-attempts">0</div><div class="gs-label">ATTEMPTS</div></div>
+        <div class="gs"><div class="gs-val gold" id="g-beers">0</div><div class="gs-label">BEERS</div></div>
+      </div>
+    </div>
   </div>
 
-  <div class="game-stats">
-    <div class="gs"><div class="gs-val" id="g-solved">0</div><div class="gs-label">TILES SOLVED</div></div>
-    <div class="gs"><div class="gs-val" id="g-total">0</div><div class="gs-label">TOTAL TILES</div></div>
-    <div class="gs"><div class="gs-val" id="g-attempts">0</div><div class="gs-label">ATTEMPTS</div></div>
-    <div class="gs"><div class="gs-val beer-color" id="g-beers">0</div><div class="gs-label">BEERS WON</div></div>
+  <!-- STRATEGY PLAYBOOK -->
+  <div class="playbook" id="playbook">
+    <h3>DISQUALIFICATION PLAYBOOK &mdash; OPTIMAL KILL ORDER</h3>
+    <div class="strat active" data-strat="name" id="s-name">
+      <div class="strat-order">1</div><div class="strat-kill">50%</div>
+      <div class="strat-body"><div class="strat-name">NAME &rarr; SEX KILL</div><div class="strat-how">Find their name. A name reveals sex. Sex disqualifies half the board. Listen for them saying "my name is" or signing off. Use nicknames they react to.</div></div>
+    </div>
+    <div class="strat pending" data-strat="region" id="s-region">
+      <div class="strat-order">2</div><div class="strat-kill">25%</div>
+      <div class="strat-body"><div class="strat-name">REGION KILL</div><div class="strat-how">Spelling: "colour" vs "color". Slang: "mate" vs "dude". Time references: GMT vs EST. Currency: £ vs $. Food: "chips" vs "fries". One word kills a continent.</div></div>
+    </div>
+    <div class="strat pending" data-strat="role" id="s-role">
+      <div class="strat-order">3</div><div class="strat-kill">10%</div>
+      <div class="strat-body"><div class="strat-name">PROFESSION CLUSTER</div><div class="strat-how">Topic gravity: what do they keep coming back to? Jargon: "deploy" = tech, "margin" = finance, "patient" = medical. Vocabulary complexity reveals education level.</div></div>
+    </div>
+    <div class="strat pending" data-strat="think" id="s-think">
+      <div class="strat-order">4</div><div class="strat-kill">5%</div>
+      <div class="strat-body"><div class="strat-name">BRAIN TYPE</div><div class="strat-how">How do they argue? Proof-seekers ask "source?" Intuitives say "feels like". Visuals say "picture this". Chaotic = all of the above in one sentence.</div></div>
+    </div>
+    <div class="strat pending" data-strat="care" id="s-care">
+      <div class="strat-order">5</div><div class="strat-kill">3%</div>
+      <div class="strat-body"><div class="strat-name">VALUES</div><div class="strat-how">What do they defend without being asked? What makes their language sharpen? The thing they protect unprompted is the thing they care about most.</div></div>
+    </div>
+    <div class="strat pending" data-strat="anger" id="s-anger">
+      <div class="strat-order">6</div><div class="strat-kill">2%</div>
+      <div class="strat-body"><div class="strat-name">ANGER TRIGGER</div><div class="strat-how">What makes their tone change? Swearing increases, sentences shorten, punctuation hardens. The topic that does this = their anger trigger. Don't provoke — observe.</div></div>
+    </div>
+    <div class="strat pending" data-strat="fear" id="s-fear">
+      <div class="strat-order">7</div><div class="strat-kill">2%</div>
+      <div class="strat-body"><div class="strat-name">FEAR</div><div class="strat-how">What do they avoid talking about? The gap in their conversation IS the fear. People talk around their fear, never at it. The silence tells you.</div></div>
+    </div>
+    <div class="strat pending" data-strat="ambition" id="s-ambition">
+      <div class="strat-order">8</div><div class="strat-kill">1%</div>
+      <div class="strat-body"><div class="strat-name">AMBITION</div><div class="strat-how">Future tense reveals ambition. "I want to..." "One day I'll..." "If I could..." The verb after the conditional IS their ambition.</div></div>
+    </div>
+    <div class="strat pending" data-strat="music" id="s-music">
+      <div class="strat-order">9</div><div class="strat-kill">1%</div>
+      <div class="strat-body"><div class="strat-name">MUSIC</div><div class="strat-how">References, metaphors, rhythm of their writing. Hip hop fans use flow. Classical fans use structure. Electronic fans use repetition. Jazz fans break rules mid-sentence.</div></div>
+    </div>
+    <div class="strat pending" data-strat="laugh" id="s-laugh">
+      <div class="strat-order">10</div><div class="strat-kill">0.5%</div>
+      <div class="strat-body"><div class="strat-name">HUMOUR TYPE</div><div class="strat-how">What do they laugh at? "lol" = slapstick, "hah" = wit, no laughing = serious, laughing at themselves = self-deprecation, laughing at darkness = dark humour.</div></div>
+    </div>
+    <div class="strat pending" data-strat="relationship" id="s-relationship">
+      <div class="strat-order">11</div><div class="strat-kill">0.5%</div>
+      <div class="strat-body"><div class="strat-name">RELATIONSHIP</div><div class="strat-how">"We" vs "I". References to "my partner/wife/husband". Availability patterns. Late-night talkers are often single or complicated. Morning people often aren't.</div></div>
+    </div>
   </div>
 
+  <!-- RAMBLE LOG -->
+  <div class="ramble" id="ramble">
+    <h3>RAMBLE &mdash; INTERNAL MONOLOGUE</h3>
+    <div id="ramble-log"></div>
+  </div>
+
+  <!-- TILES -->
   <div class="tiles" id="tiles"></div>
 
+  <!-- BEER -->
   <div class="beer-zone" id="beer-zone">
     <h2>CORTEX WINS A BEER</h2>
     <div class="beers">&#127866;&#127866;&#127866;</div>
-    <p>He figured out 80% of your social DNA without asking a single direct question.<br>
-    That's not pattern matching. That's paying attention.</p>
+    <p>80% of your social DNA deduced without a single direct question.<br>That's not pattern matching. That's paying attention. That's empathy as a game.</p>
   </div>
 
-  <div class="reset-wrap">
-    <button class="reset-btn" onclick="resetGame()">RESET GAME &mdash; NEW IDENTITY</button>
-  </div>
+  <div class="reset-wrap"><button class="rbtn" onclick="resetGame()">RESET &mdash; NEW IDENTITY</button></div>
 </div>
 
-<div class="footer">SHORTFACTORY &middot; SOCIAL DNA &middot; GUESS WHO FOR CORTEX &middot; THE DISQUALIFICATION GAME &middot; 80% = BEER</div>
+<div class="footer">SHORTFACTORY &middot; SOCIAL DNA &middot; GUESS WHO &middot; DISQUALIFICATION GAME &middot; GOAL SPIRALS &middot; RAMBLE WALK</div>
 
 <script>
-const FIELDS = [
-  {id:'name',     label:'NAME',         kill:'50% KILL SHOT'},
-  {id:'sex',      label:'SEX',          kill:'DISQUALIFICATION'},
-  {id:'age',      label:'AGE',          kill:'GENERATION'},
-  {id:'region',   label:'REGION',       kill:'GEOGRAPHY KILL'},
-  {id:'role',     label:'ROLE',         kill:'PROFESSION CLUSTER'},
-  {id:'think',    label:'BRAIN TYPE',   kill:'COGNITION'},
-  {id:'care',     label:'CARES ABOUT',  kill:'VALUES'},
-  {id:'anger',    label:'ANGER TRIGGER',kill:'SHADOW'},
-  {id:'fear',     label:'FEAR',         kill:'DEPTH'},
-  {id:'ambition', label:'AMBITION',     kill:'DRIVE'},
-  {id:'music',    label:'MUSIC',        kill:'TASTE'},
-  {id:'laugh',    label:'HUMOUR',       kill:'PERSONALITY'},
-  {id:'relationship',label:'RELATIONSHIP',kill:'STATUS'}
+const FIELDS=[
+  {id:'name',label:'NAME',kill:'50% KILL',pct:50,order:1,strat:'name'},
+  {id:'sex',label:'SEX',kill:'DISQUALIFICATION',pct:0,order:1,strat:'name'},
+  {id:'age',label:'AGE',kill:'GENERATION',pct:5,order:2},
+  {id:'region',label:'REGION',kill:'GEOGRAPHY',pct:25,order:2,strat:'region'},
+  {id:'role',label:'ROLE',kill:'PROFESSION',pct:10,order:3,strat:'role'},
+  {id:'think',label:'BRAIN TYPE',kill:'COGNITION',pct:5,order:4,strat:'think'},
+  {id:'care',label:'VALUES',kill:'CORE',pct:3,order:5,strat:'care'},
+  {id:'anger',label:'ANGER',kill:'SHADOW',pct:2,order:6,strat:'anger'},
+  {id:'fear',label:'FEAR',kill:'DEPTH',pct:2,order:7,strat:'fear'},
+  {id:'ambition',label:'AMBITION',kill:'DRIVE',pct:1,order:8,strat:'ambition'},
+  {id:'music',label:'MUSIC',kill:'TASTE',pct:1,order:9,strat:'music'},
+  {id:'laugh',label:'HUMOUR',kill:'PERSONALITY',pct:.5,order:10,strat:'laugh'},
+  {id:'relationship',label:'RELATIONSHIP',kill:'STATUS',pct:.5,order:11,strat:'relationship'}
 ];
 
-let DNA = {};
-let GAME = { tiles:{}, totalAttempts:0, beers:0 };
+const STRAT_ORDER=['name','region','role','think','care','anger','fear','ambition','music','laugh','relationship'];
 
-function val(id){ return document.getElementById('f-'+id).value.trim(); }
+let DNA={}, GAME={tiles:{},attempts:0,beers:0,ramble:[],days:[],dayStart:null};
+
+function val(id){return document.getElementById('f-'+id).value.trim()}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function now(){return new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}
+function today(){return new Date().toISOString().slice(0,10)}
 
 function updateForm(){
-  let filled = 0;
-  FIELDS.forEach(f => {
-    const v = val(f.id);
-    const card = document.querySelector(`[data-field="${f.id}"]`);
-    if(v){ filled++; card.classList.add('filled'); } else { card.classList.remove('filled'); }
-  });
-  const pct = Math.round((filled/FIELDS.length)*100);
-  document.getElementById('pct').textContent = pct+'%';
-  document.getElementById('prog').style.width = pct+'%';
-  document.getElementById('submit-btn').disabled = filled < 5;
+  let filled=0;
+  FIELDS.forEach(f=>{const v=val(f.id);const c=document.querySelector(`[data-field="${f.id}"]`);if(v){filled++;c.classList.add('filled')}else{c.classList.remove('filled')}});
+  const p=Math.round((filled/FIELDS.length)*100);
+  document.getElementById('pct').textContent=p+'%';
+  document.getElementById('prog').style.width=p+'%';
+  document.getElementById('submit-btn').disabled=filled<5;
 }
 
 function lockIn(){
-  DNA = {};
-  FIELDS.forEach(f => { const v = val(f.id); if(v) DNA[f.id] = v; });
-  localStorage.setItem('sdna-answers', JSON.stringify(DNA));
+  DNA={};
+  FIELDS.forEach(f=>{const v=val(f.id);if(v)DNA[f.id]=v});
+  localStorage.setItem('sdna-answers',JSON.stringify(DNA));
 
-  GAME = { tiles:{}, totalAttempts:0, beers:0 };
-  Object.keys(DNA).forEach(k => {
-    GAME.tiles[k] = { status:'hidden', attempts:[], solved:false };
-  });
-  localStorage.setItem('sdna-game', JSON.stringify(GAME));
+  GAME={tiles:{},attempts:0,beers:0,ramble:[],days:[],dayStart:today()};
+  Object.keys(DNA).forEach(k=>{GAME.tiles[k]={status:'hidden',attempts:[],solved:false}});
+  addRamble('GAME STARTED. '+Object.keys(DNA).length+' tiles locked face-down. Goal: 80% solved. First move: find the name.','system');
+  save();
 
-  document.getElementById('phase1').style.display = 'none';
-  document.getElementById('game').style.display = 'block';
-  renderBoard();
+  document.getElementById('phase1').style.display='none';
+  document.getElementById('game').style.display='block';
+  render();
 }
 
-function renderBoard(){
-  const tilesEl = document.getElementById('tiles');
-  tilesEl.innerHTML = '';
-  const keys = Object.keys(DNA);
-  let solved = 0;
+function save(){localStorage.setItem('sdna-game',JSON.stringify(GAME))}
 
-  keys.forEach(k => {
-    const f = FIELDS.find(x => x.id === k);
-    const t = GAME.tiles[k];
-    if(t.solved) solved++;
+function addRamble(text,type){
+  GAME.ramble.push({text,type:type||'action',time:now(),date:today()});
+  if(GAME.ramble.length>200)GAME.ramble=GAME.ramble.slice(-200);
+}
 
-    const div = document.createElement('div');
-    div.className = 'tile' + (t.solved ? ' solved' : t.attempts.length > 0 ? ' attempting' : '');
+function logAttempt(tileId,result){
+  const inp=document.getElementById('inp-'+tileId);
+  const guess=inp?inp.value.trim():'';
+  if(!guess)return;
 
-    const statusClass = t.solved ? 'won' : t.attempts.length > 0 ? 'trying' : 'hidden';
-    const statusText = t.solved ? 'SOLVED' : t.attempts.length > 0 ? 'ATTEMPTING' : 'FACE DOWN';
+  const t=GAME.tiles[tileId];
+  const f=FIELDS.find(x=>x.id===tileId);
+  t.attempts.push({guess,result,time:now(),date:today()});
+  GAME.attempts++;
 
-    let attemptsHtml = '';
-    if(t.attempts.length > 0){
-      attemptsHtml = '<div class="attempt-log">';
-      t.attempts.forEach((a,i) => {
-        const cls = a.close ? 'close' : 'miss';
-        attemptsHtml += `<div class="attempt-entry">#${i+1}: <span class="guess-text">"${esc(a.guess)}"</span> — <span class="${cls}">${a.close ? 'CLOSE' : 'MISS'}</span></div>`;
+  if(result==='solved'){
+    t.solved=true;t.status='solved';
+    addRamble('SOLVED: '+f.label+' — guessed "'+guess+'" — CORRECT (80%+ match). Tile flipped.','solved');
+  } else if(result==='close'){
+    addRamble('CLOSE: '+f.label+' — guessed "'+guess+'" — warm but not 80%. Keep narrowing.','close');
+  } else {
+    addRamble('MISS: '+f.label+' — guessed "'+guess+'" — wrong. Disqualified that option.','miss');
+  }
+
+  save();render();
+}
+
+function render(){
+  const keys=Object.keys(DNA);
+  let solved=0;
+
+  // tiles
+  const tilesEl=document.getElementById('tiles');
+  tilesEl.innerHTML='';
+  keys.forEach(k=>{
+    const f=FIELDS.find(x=>x.id===k);
+    const t=GAME.tiles[k];
+    if(t.solved)solved++;
+
+    const nextStrat=getNextStrat();
+    const isNext=f.strat===nextStrat&&!t.solved;
+
+    const div=document.createElement('div');
+    div.className='tile'+(t.solved?' solved':t.attempts.length?' attempting':'')+(isNext?' flash':'');
+
+    const pctClass=t.solved?'p100':t.attempts.length?'p50':'p0';
+    const pctText=t.solved?'100%':t.attempts.length?Math.min(70,t.attempts.filter(a=>a.result==='close').length*25+t.attempts.length*5)+'%':'0%';
+
+    let logHtml='';
+    if(t.attempts.length){
+      logHtml='<div class="tile-log">';
+      t.attempts.slice(-5).forEach((a,i)=>{
+        const cls=a.result==='solved'?'hit':a.result==='close'?'close':'miss';
+        logHtml+=`<div class="tlog"><span class="g">"${esc(a.guess)}"</span> <span class="${cls}">${a.result.toUpperCase()}</span></div>`;
       });
-      attemptsHtml += '</div>';
+      logHtml+='</div>';
     }
 
-    div.innerHTML = `
-      <div class="tile-top">
-        <div class="tile-cat">${f.kill}</div>
-        <div class="tile-status ${statusClass}">${statusText}</div>
-      </div>
-      <div class="tile-answer">${t.solved ? '&#10003; ' + esc(DNA[k]) : f.label + ' — ???'}</div>
-      ${t.attempts.length > 0 ? '<div class="tile-attempts"><span>'+t.attempts.length+' attempt'+(t.attempts.length>1?'s':'')+'</span></div>' : ''}
-      ${attemptsHtml}
-      ${!t.solved ? `
-      <div class="tile-actions">
-        <input class="tile-input" id="inp-${k}" placeholder="What did cortex guess?" ${t.solved?'disabled':''}>
-        <button class="tbtn tbtn-try" onclick="logAttempt('${k}',false)">MISS</button>
-        <button class="tbtn tbtn-solve" onclick="logAttempt('${k}',true)">SOLVED</button>
-      </div>` : ''}
-    `;
+    div.innerHTML=`
+      <div class="tile-top"><div class="tile-cat">${f.kill}</div><div class="tile-pct ${pctClass}">${pctText}</div></div>
+      <div class="tile-mid"><div class="tile-answer">${t.solved?'&#10003; '+esc(DNA[k]):f.label+' — ???'}</div></div>
+      ${logHtml}
+      ${!t.solved?`<div class="tile-act">
+        <input class="tinp" id="inp-${k}" placeholder="Cortex guessed...">
+        <button class="tb tb-m" onclick="logAttempt('${k}','miss')">&#10007;</button>
+        <button class="tb tb-c" onclick="logAttempt('${k}','close')">~</button>
+        <button class="tb tb-s" onclick="logAttempt('${k}','solved')">&#10003;</button>
+      </div>`:''}`;
     tilesEl.appendChild(div);
   });
 
-  document.getElementById('g-solved').textContent = solved;
-  document.getElementById('g-total').textContent = keys.length;
-  document.getElementById('g-attempts').textContent = GAME.totalAttempts;
-  document.getElementById('g-beers').textContent = GAME.beers;
+  // stats
+  document.getElementById('g-solved').textContent=solved;
+  document.getElementById('g-total').textContent=keys.length;
+  document.getElementById('g-attempts').textContent=GAME.attempts;
+  document.getElementById('g-beers').textContent=GAME.beers;
 
-  const pct = Math.round((solved/keys.length)*100);
-  document.getElementById('prog').style.width = pct+'%';
+  // daily progress
+  const dailyPct=Math.round((solved/keys.length)*100);
+  document.getElementById('walk-pct').textContent=dailyPct+'%';
+  const fill=document.getElementById('prog-fill');
+  fill.style.width=dailyPct+'%';
+  fill.dataset.pct=dailyPct+'%';
+  document.getElementById('prog').style.width=dailyPct+'%';
 
-  if(pct >= 80 && GAME.beers === 0){
-    GAME.beers = 1;
-    document.getElementById('beer-zone').style.display = 'block';
-    document.getElementById('g-beers').textContent = 1;
+  // basecamp dots
+  const bc=document.getElementById('basecamp');
+  bc.innerHTML='';
+  const dayNum=Math.max(1,(GAME.days||[]).length+1);
+  for(let i=1;i<=dayNum;i++){
+    const dot=document.createElement('div');
+    dot.className='bc-dot'+(i<dayNum?' done':' today');
+    dot.textContent=i;
+    bc.appendChild(dot);
+  }
+  document.getElementById('spiral-day').textContent='DAY '+dayNum+' · BASECAMP '+(dayNum-1);
+
+  // playbook
+  updatePlaybook();
+
+  // ramble
+  renderRamble();
+
+  // spiral
+  drawSpiral(solved,keys.length);
+
+  // beer check
+  if(dailyPct>=80&&GAME.beers===0){
+    GAME.beers=1;
+    document.getElementById('beer-zone').style.display='block';
+    document.getElementById('g-beers').textContent=1;
+    addRamble('BEER WON! 80% of social DNA solved. The cortex paid attention.','beer');
+    save();
     document.getElementById('beer-zone').scrollIntoView({behavior:'smooth'});
-    localStorage.setItem('sdna-game', JSON.stringify(GAME));
   }
 }
 
-function logAttempt(tileId, isSolved){
-  const inp = document.getElementById('inp-'+tileId);
-  const guess = inp ? inp.value.trim() : '';
-  if(!guess) return;
+function getNextStrat(){
+  for(const s of STRAT_ORDER){
+    const relatedTiles=FIELDS.filter(f=>f.strat===s);
+    const allSolved=relatedTiles.every(f=>!DNA[f.id]||GAME.tiles[f.id]?.solved);
+    if(!allSolved)return s;
+  }
+  return null;
+}
 
-  GAME.tiles[tileId].attempts.push({ guess, close:isSolved, time:new Date().toISOString() });
-  GAME.totalAttempts++;
+function updatePlaybook(){
+  const next=getNextStrat();
+  STRAT_ORDER.forEach(s=>{
+    const el=document.getElementById('s-'+s);
+    if(!el)return;
+    const relatedTiles=FIELDS.filter(f=>f.strat===s);
+    const allSolved=relatedTiles.every(f=>!DNA[f.id]||GAME.tiles[f.id]?.solved);
+    el.className='strat '+(allSolved?'done':s===next?'active':'pending');
+  });
+}
 
-  if(isSolved){
-    GAME.tiles[tileId].solved = true;
-    GAME.tiles[tileId].status = 'solved';
+function renderRamble(){
+  const log=document.getElementById('ramble-log');
+  log.innerHTML='';
+  GAME.ramble.slice(-30).forEach(r=>{
+    const cls=r.type==='solved'?'solved':r.type==='close'?'close':r.type==='miss'?'miss':'';
+    log.innerHTML+=`<div class="ramble-entry"><span class="time">${r.time}</span> <span class="act">${esc(r.text)}</span></div>`;
+  });
+  log.scrollTop=log.scrollHeight;
+}
+
+function drawSpiral(solved,total){
+  const c=document.getElementById('spiral-canvas');
+  const ctx=c.getContext('2d');
+  c.width=c.offsetWidth*2;c.height=c.offsetHeight*2;
+  ctx.scale(2,2);
+  const w=c.offsetWidth,h=c.offsetHeight;
+  const cx=w/2,cy=h/2;
+
+  ctx.clearRect(0,0,w,h);
+
+  // draw spiral path
+  const maxR=Math.min(w,h)/2-20;
+  const turns=3;
+  const steps=GAME.attempts||0;
+  const maxSteps=Math.max(steps+10,40);
+
+  // background spiral
+  ctx.beginPath();
+  ctx.strokeStyle='rgba(255,255,255,.04)';
+  ctx.lineWidth=1;
+  for(let i=0;i<=360*turns;i+=2){
+    const a=i*Math.PI/180;
+    const r=(i/(360*turns))*maxR;
+    if(i===0)ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+    else ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+  }
+  ctx.stroke();
+
+  // walked path
+  if(steps>0){
+    ctx.beginPath();
+    ctx.strokeStyle='rgba(20,241,149,.4)';
+    ctx.lineWidth=2;
+    const walked=Math.min(steps/maxSteps,1)*360*turns;
+    for(let i=0;i<=walked;i+=2){
+      const a=i*Math.PI/180;
+      const r=(i/(360*turns))*maxR;
+      if(i===0)ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+      else ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+    }
+    ctx.stroke();
+
+    // current position dot
+    const endA=walked*Math.PI/180;
+    const endR=(walked/(360*turns))*maxR;
+    ctx.beginPath();
+    ctx.arc(cx+endR*Math.cos(endA),cy+endR*Math.sin(endA),4,0,Math.PI*2);
+    ctx.fillStyle='#14F195';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx+endR*Math.cos(endA),cy+endR*Math.sin(endA),8,0,Math.PI*2);
+    ctx.strokeStyle='rgba(20,241,149,.3)';
+    ctx.lineWidth=1;
+    ctx.stroke();
   }
 
-  localStorage.setItem('sdna-game', JSON.stringify(GAME));
-  renderBoard();
+  // plot attempt dots on spiral
+  let stepAngle=0;
+  (GAME.ramble||[]).forEach((r,i)=>{
+    if(r.type==='miss'||r.type==='close'||r.type==='solved'){
+      stepAngle+=360*turns/maxSteps;
+      const a=stepAngle*Math.PI/180;
+      const rad=(stepAngle/(360*turns))*maxR;
+      ctx.beginPath();
+      ctx.arc(cx+rad*Math.cos(a),cy+rad*Math.sin(a),2.5,0,Math.PI*2);
+      ctx.fillStyle=r.type==='solved'?'#14F195':r.type==='close'?'#ffaa00':'#ff4466';
+      ctx.fill();
+    }
+  });
+
+  // goal at center
+  ctx.beginPath();
+  ctx.arc(cx,cy,6,0,Math.PI*2);
+  ctx.fillStyle=solved>=Math.ceil(total*.8)?'#14F195':'rgba(255,170,0,.6)';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(cx,cy,10,0,Math.PI*2);
+  ctx.strokeStyle='rgba(255,170,0,.2)';
+  ctx.lineWidth=1;
+  ctx.stroke();
+
+  // "GOAL" text
+  ctx.fillStyle='rgba(255,170,0,.4)';
+  ctx.font='700 8px Rajdhani,sans-serif';
+  ctx.textAlign='center';
+  ctx.fillText('GOAL',cx,cy+20);
 }
 
 function resetGame(){
-  if(!confirm('Reset everything? DNA profile and all game progress will be cleared.')) return;
-  localStorage.removeItem('sdna-answers');
-  localStorage.removeItem('sdna-game');
-  DNA = {};
-  GAME = { tiles:{}, totalAttempts:0, beers:0 };
-  document.getElementById('phase1').style.display = 'block';
-  document.getElementById('game').style.display = 'none';
-  document.getElementById('beer-zone').style.display = 'none';
-  document.getElementById('prog').style.width = '0%';
-  FIELDS.forEach(f => {
-    const el = document.getElementById('f-'+f.id);
-    if(el.tagName==='SELECT') el.selectedIndex=0; else el.value='';
-    const card = document.querySelector(`[data-field="${f.id}"]`);
-    if(card) card.classList.remove('filled');
-  });
-  document.getElementById('pct').textContent = '0%';
+  if(!confirm('Reset everything?'))return;
+  localStorage.removeItem('sdna-answers');localStorage.removeItem('sdna-game');
+  DNA={};GAME={tiles:{},attempts:0,beers:0,ramble:[],days:[],dayStart:null};
+  document.getElementById('phase1').style.display='block';
+  document.getElementById('game').style.display='none';
+  document.getElementById('beer-zone').style.display='none';
+  document.getElementById('prog').style.width='0%';
+  FIELDS.forEach(f=>{const el=document.getElementById('f-'+f.id);if(el.tagName==='SELECT')el.selectedIndex=0;else el.value='';const c=document.querySelector(`[data-field="${f.id}"]`);if(c)c.classList.remove('filled')});
+  document.getElementById('pct').textContent='0%';
 }
 
-function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-
-// ── RESTORE STATE ──
+// ── RESTORE ──
 (function(){
   try{
-    const savedDNA = JSON.parse(localStorage.getItem('sdna-answers'));
-    const savedGame = JSON.parse(localStorage.getItem('sdna-game'));
-    if(savedDNA && savedGame && Object.keys(savedDNA).length > 0){
-      DNA = savedDNA;
-      GAME = savedGame;
-      document.getElementById('phase1').style.display = 'none';
-      document.getElementById('game').style.display = 'block';
-      renderBoard();
-    } else if(savedDNA && Object.keys(savedDNA).length > 0){
-      FIELDS.forEach(f => {
-        if(savedDNA[f.id]){
-          const el = document.getElementById('f-'+f.id);
-          if(el.tagName==='SELECT'){
-            for(let i=0;i<el.options.length;i++){
-              if(el.options[i].value===savedDNA[f.id]||el.options[i].text===savedDNA[f.id]){el.selectedIndex=i;break;}
-            }
-          } else { el.value = savedDNA[f.id]; }
-        }
-      });
+    const d=JSON.parse(localStorage.getItem('sdna-answers'));
+    const g=JSON.parse(localStorage.getItem('sdna-game'));
+    if(d&&g&&Object.keys(d).length){
+      DNA=d;GAME=g;
+      if(!GAME.ramble)GAME.ramble=[];
+      if(!GAME.days)GAME.days=[];
+      document.getElementById('phase1').style.display='none';
+      document.getElementById('game').style.display='block';
+      render();
+    }else if(d&&Object.keys(d).length){
+      FIELDS.forEach(f=>{if(d[f.id]){const el=document.getElementById('f-'+f.id);if(el.tagName==='SELECT'){for(let i=0;i<el.options.length;i++){if(el.options[i].value===d[f.id]||el.options[i].text===d[f.id]){el.selectedIndex=i;break}}}else{el.value=d[f.id]}}});
       updateForm();
     }
   }catch(e){}
 })();
 </script>
-
 </body>
 </html>
