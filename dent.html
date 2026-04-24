@@ -77,14 +77,20 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
 .btn-ghost{background:transparent;color:#00d4ff;border:1px solid rgba(0,212,255,.2)}
 .btn-ghost:hover{background:rgba(0,212,255,.05);border-color:#00d4ff}
 
-#pipe-strip{display:flex;overflow-x:auto;gap:0;width:100%;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-#pipe-strip::-webkit-scrollbar{height:3px}
-#pipe-strip::-webkit-scrollbar-thumb{background:#1b263b}
+#pipe-strip{display:flex;overflow-x:auto;gap:0;width:100%;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+#pipe-strip::-webkit-scrollbar{display:none}
 .pipe-stage{min-width:280px;flex-shrink:0;scroll-snap-align:start;border-right:1px solid rgba(0,212,255,.04);padding:0;display:flex;flex-direction:column;align-items:center}
 .pipe-stage:last-child{border-right:none}
 .pipe-c{width:280px;height:200px;display:block}
 .pipe-label{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:.25em;color:#00d4ff;margin:10px 0 4px;font-weight:600;text-align:center}
 .pipe-desc{font-size:8.5px;line-height:1.9;color:#556;text-align:center;padding:0 16px 16px;max-width:260px}
+#pipe-wrap{position:relative;width:100%}
+#pipe-wrap::before,#pipe-wrap::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;pointer-events:none}
+#pipe-wrap::before{left:0;background:linear-gradient(90deg,#0d1b2a,transparent)}
+#pipe-wrap::after{right:0;background:linear-gradient(270deg,#0d1b2a,transparent)}
+#pipe-dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
+.pipe-dot{width:5px;height:5px;border-radius:50%;background:#1b263b;transition:all .3s}
+.pipe-dot.active{background:#00d4ff;box-shadow:0 0 6px rgba(0,212,255,.4)}
 </style>
 </head>
 <body>
@@ -119,6 +125,7 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
 <section class="section" id="s-pipeline" style="min-height:auto;padding:40px 0 60px">
   <div class="sect-title">THE DEVELOPMENT PIPELINE</div>
   <div class="sect-sub">FROM SUBSTRATE TO SCAFFOLD — HOW THE DENT MATRIX WAS ENGINEERED</div>
+  <div id="pipe-wrap">
   <div id="pipe-strip">
     <div class="pipe-stage">
       <canvas class="pipe-c" id="pc0" width="300" height="200"></canvas>
@@ -160,6 +167,8 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
       <div class="pipe-label">FIRST PRINCIPLES</div>
       <div class="pipe-desc">No backpropagation. No scraped data. No following the crowd. Abstract thought nobody else attempts. Evidence, not hubris.</div>
     </div>
+  </div>
+  <div id="pipe-dots"></div>
   </div>
 </section>
 
@@ -456,6 +465,18 @@ function heroAnim(t){
   requestAnimationFrame(heroAnim);
 }
 requestAnimationFrame(heroAnim);
+
+// ═══ PIPELINE DOT TRACKER ═══
+(function(){
+  const strip=document.getElementById('pipe-strip');
+  const dots=document.getElementById('pipe-dots');
+  if(!strip||!dots)return;
+  for(let i=0;i<8;i++){const d=document.createElement('div');d.className='pipe-dot'+(i===0?' active':'');d.onclick=()=>{strip.scrollTo({left:i*280,behavior:'smooth'});};dots.appendChild(d);}
+  strip.addEventListener('scroll',()=>{
+    const idx=Math.round(strip.scrollLeft/280);
+    dots.querySelectorAll('.pipe-dot').forEach((d,i)=>{d.classList.toggle('active',i===idx);});
+  });
+})();
 
 // ═══ PIPELINE STAGE ANIMATIONS ═══
 (function(){
