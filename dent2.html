@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0d1b2a">
+<title>DENT 2 — Origami Blood: Self-Manufacturing Shard Transit — ShortFactory</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans-serif;overflow-x:hidden}
+::selection{background:rgba(255,102,0,.2);color:#ff6600}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:#0d1b2a}
+::-webkit-scrollbar-thumb{background:#1b263b;border-radius:2px}
+
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;background:rgba(13,27,42,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,102,0,.12)}
+.nav-brand{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;color:#ff6600;letter-spacing:.1em;text-decoration:none}
+.nav-tag{font-size:9px;letter-spacing:.2em;color:#8892a0}
+.nav-links{display:flex;gap:16px;align-items:center}
+.nav-links a{font-size:9px;letter-spacing:.15em;color:#667;text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:#ff6600}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 30px 40px;position:relative}
+.hero .pre{font-size:10px;letter-spacing:.5em;color:#8892a0;margin-bottom:12px}
+.hero h1{font-family:'Rajdhani',sans-serif;font-size:clamp(24px,5vw,44px);font-weight:700;color:#ff6600;letter-spacing:.08em;margin-bottom:8px}
+.hero .sub{font-size:clamp(10px,1.6vw,13px);letter-spacing:.15em;color:#8892a0;font-weight:300;margin-bottom:6px;max-width:700px}
+.hero .sub2{font-size:10px;color:#445;letter-spacing:.12em;margin-bottom:30px}
+
+.live-frame{width:100%;max-width:1400px;margin:0 auto;border:1px solid rgba(255,102,0,.15);border-radius:8px;overflow:hidden;background:#06060c;position:relative}
+.live-frame iframe{width:100%;height:80vh;border:none;display:block}
+
+.teach{max-width:900px;margin:0 auto;padding:60px 30px}
+.teach h2{font-family:'Rajdhani',sans-serif;font-size:18px;letter-spacing:.25em;color:#ff6600;margin-bottom:24px;text-align:center}
+.teach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:40px}
+.teach-card{background:rgba(27,38,59,.5);border:1px solid rgba(255,102,0,.1);border-radius:8px;padding:20px}
+.teach-card h3{font-size:11px;letter-spacing:.2em;color:#ff6600;margin-bottom:8px;font-family:'Rajdhani',sans-serif}
+.teach-card p{font-size:10px;line-height:2;color:#8892a0}
+.teach-card .key{color:#ff9900;font-weight:600}
+
+.rules{max-width:700px;margin:0 auto;padding:0 30px 60px}
+.rules h2{font-family:'Rajdhani',sans-serif;font-size:18px;letter-spacing:.25em;color:#ff6600;margin-bottom:24px;text-align:center}
+.rule{display:flex;gap:16px;margin-bottom:20px;padding:16px;background:rgba(27,38,59,.3);border-left:2px solid rgba(255,102,0,.3);border-radius:0 6px 6px 0}
+.rule-num{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#ff6600;min-width:30px}
+.rule-text{font-size:10px;line-height:2;color:#8892a0}
+.rule-text strong{color:#e0e6ed}
+
+.next{text-align:center;padding:40px 30px 80px}
+.next p{font-size:10px;color:#445;letter-spacing:.12em;margin-bottom:16px}
+.next a{display:inline-block;font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:.2em;font-weight:600;color:#0d1b2a;background:#ff6600;border:none;padding:10px 24px;border-radius:4px;text-decoration:none;transition:all .3s;margin:0 8px}
+.next a:hover{background:#ff9900;box-shadow:0 0 20px rgba(255,102,0,.3)}
+.next a.ghost{background:transparent;color:#ff6600;border:1px solid rgba(255,102,0,.2)}
+.next a.ghost:hover{background:rgba(255,102,0,.05);border-color:#ff6600}
+
+.footer{text-align:center;padding:30px;font-size:8px;color:#223;letter-spacing:.15em;border-top:1px solid rgba(255,102,0,.06)}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="/dent.html" class="nav-brand">DENT MATRIX</a>
+  <span class="nav-tag">ORIGAMI BLOOD &middot; SELF-MANUFACTURING SHARD TRANSIT</span>
+  <div class="nav-links">
+    <a href="/dent.html">DENT 1</a>
+    <a href="/dent2.html" style="color:#ff6600">DENT 2</a>
+    <a href="/dent3.html">DENT 3</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="pre">COMPUTANIUM &middot; DENT MATRIX &middot; SHARD TRANSIT</div>
+  <h1>ORIGAMI BLOOD</h1>
+  <div class="sub">Self-manufacturing triangular shard transit. One seed triangle grows a scaffold — each generation shrinks 4% to flow into tighter spaces. Shards fold-walk through the mesh using polarisation-flip locomotion. No motors. The scaffold IS the propulsion.</div>
+  <div class="sub2">NOT COMPUTER. NOT BIOLOGY. SOMEWHERE IN BETWEEN.</div>
+</section>
+
+<div class="live-frame">
+  <iframe src="/origameblood.html" loading="lazy"></iframe>
+</div>
+
+<section class="teach">
+  <h2>WHAT YOU ARE SEEING</h2>
+  <div class="teach-grid">
+    <div class="teach-card">
+      <h3>THE SCAFFOLD</h3>
+      <p>A single <span class="key">seed triangle</span> spawns children from its edges. Each child is <span class="key">4% smaller</span> than its parent. The scaffold only grows from itself — self-manufacturing. This IS the skeleton.</p>
+    </div>
+    <div class="teach-card">
+      <h3>THE SHARDS</h3>
+      <p><span class="key">Yellow triangles</span> are blood cells. They fold-walk through the scaffold by hinging on shared edges — apex mirrors across, lifts, settles. The fold height is proportional to edge length. <span class="key">Smaller cells = tighter folds.</span></p>
+    </div>
+    <div class="teach-card">
+      <h3>THE SHRINKAGE</h3>
+      <p>Each generation shrinks. Arteries become capillaries. The shards physically get smaller as they enter tighter spaces — <span class="key">same physics at every scale.</span> Macro robotics to nanite blood cells.</p>
+    </div>
+    <div class="teach-card">
+      <h3>THE LOCOMOTION</h3>
+      <p><span class="key">Polarisation-flip domino walk.</span> No motors, no wheels. The shard's magnetic polarity flips at the hinge edge — the scaffold pulls it through. Like falling dominoes but the domino reassembles at each step.</p>
+    </div>
+    <div class="teach-card">
+      <h3>THE CODE</h3>
+      <p>Source code is displayed on-screen in real-time. This is not hidden. <span class="key">Other AIs can read the algorithm and compete to describe the fold-walk better.</span> Open challenge.</p>
+    </div>
+    <div class="teach-card">
+      <h3>THE GLITCH</h3>
+      <p>Branches curve back and overlap. This is <span class="key">pre-genomic growth</span> — no directional control yet. The fix: <span class="key">colour-indexed genomic path selection</span> at each fork. The glitch shows you WHY genomics matters.</p>
+    </div>
+  </div>
+</section>
+
+<section class="rules">
+  <h2>THE FIVE RULES</h2>
+  <div class="rule">
+    <div class="rule-num">1</div>
+    <div class="rule-text"><strong>Self-manufacturing only.</strong> Scaffold grows from itself. Seed spawns children. Children spawn grandchildren. Nothing external.</div>
+  </div>
+  <div class="rule">
+    <div class="rule-num">2</div>
+    <div class="rule-text"><strong>Shrink per generation.</strong> Each child is 4% smaller than its parent. Arteries narrow to capillaries. Same physics, smaller scale.</div>
+  </div>
+  <div class="rule">
+    <div class="rule-num">3</div>
+    <div class="rule-text"><strong>Outer edges only.</strong> New triangles open on the two outer edges — never the parent edge. Growth pushes outward.</div>
+  </div>
+  <div class="rule">
+    <div class="rule-num">4</div>
+    <div class="rule-text"><strong>Fold-walk on shared edges.</strong> Shards hinge on the edge they share with the next cell. Apex mirrors across. Lift proportional to edge length.</div>
+  </div>
+  <div class="rule">
+    <div class="rule-num">5</div>
+    <div class="rule-text"><strong>Scale invariant.</strong> The rules don't change with size. A 60px seed triangle and a 2px nanite cell obey the same five rules.</div>
+  </div>
+</section>
+
+<div class="next">
+  <p>PROGRESSION: V1 (UNIFORM GRID) &rarr; V2 (SHRINKING CAPILLARIES) &rarr; V3 (GENOMIC PATH SELECTION)</p>
+  <a href="/dent.html">DENT MATRIX</a>
+  <a href="/dent3.html" class="ghost">DENT 3 &mdash; V1 GRID</a>
+</div>
+
+<div class="footer">SHORTFACTORY &middot; DENT MATRIX &middot; ORIGAMI BLOOD V2 &middot; 24 APRIL 2026 &middot; SCALE INVARIANT: SAME PHYSICS FROM MACRO ROBOTICS TO NANITE BLOOD CELLS</div>
+
+</body>
+</html>

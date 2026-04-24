@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0d1b2a">
+<title>DENT 3 — Origami Blood V1: Uniform Grid Transit — ShortFactory</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans-serif;overflow-x:hidden}
+::selection{background:rgba(0,212,255,.2);color:#00d4ff}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:#0d1b2a}
+::-webkit-scrollbar-thumb{background:#1b263b;border-radius:2px}
+
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;background:rgba(13,27,42,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,212,255,.08)}
+.nav-brand{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;color:#00d4ff;letter-spacing:.1em;text-decoration:none}
+.nav-tag{font-size:9px;letter-spacing:.2em;color:#8892a0}
+.nav-links{display:flex;gap:16px;align-items:center}
+.nav-links a{font-size:9px;letter-spacing:.15em;color:#667;text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:#00d4ff}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 30px 40px;position:relative}
+.hero .pre{font-size:10px;letter-spacing:.5em;color:#8892a0;margin-bottom:12px}
+.hero h1{font-family:'Rajdhani',sans-serif;font-size:clamp(24px,5vw,44px);font-weight:700;color:#00d4ff;letter-spacing:.08em;margin-bottom:8px}
+.hero .sub{font-size:clamp(10px,1.6vw,13px);letter-spacing:.15em;color:#8892a0;font-weight:300;margin-bottom:6px;max-width:700px}
+.hero .sub2{font-size:10px;color:#445;letter-spacing:.12em;margin-bottom:30px}
+
+.live-frame{width:100%;max-width:1400px;margin:0 auto;border:1px solid rgba(0,212,255,.12);border-radius:8px;overflow:hidden;background:#06060c;position:relative}
+.live-frame iframe{width:100%;height:80vh;border:none;display:block}
+
+.compare{max-width:900px;margin:0 auto;padding:60px 30px}
+.compare h2{font-family:'Rajdhani',sans-serif;font-size:18px;letter-spacing:.25em;color:#00d4ff;margin-bottom:24px;text-align:center}
+.compare-table{width:100%;border-collapse:collapse;margin-bottom:40px}
+.compare-table th{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:.2em;padding:12px 16px;text-align:left;border-bottom:1px solid rgba(0,212,255,.12)}
+.compare-table th:first-child{color:#667}
+.compare-table th:nth-child(2){color:#00d4ff}
+.compare-table th:nth-child(3){color:#ff6600}
+.compare-table td{font-size:10px;padding:10px 16px;border-bottom:1px solid rgba(0,212,255,.04);color:#8892a0;line-height:1.8}
+.compare-table td:nth-child(2){color:#aab}
+.compare-table td:nth-child(3){color:#cc8844}
+.compare-table tr:hover td{background:rgba(0,212,255,.02)}
+
+.vision{max-width:800px;margin:0 auto;padding:0 30px 60px}
+.vision h2{font-family:'Rajdhani',sans-serif;font-size:18px;letter-spacing:.25em;color:#00d4ff;margin-bottom:24px;text-align:center}
+.vision-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.vision-card{background:rgba(27,38,59,.4);border:1px solid rgba(0,212,255,.08);border-radius:8px;padding:20px;position:relative;overflow:hidden}
+.vision-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.3),transparent)}
+.vision-card h3{font-size:11px;letter-spacing:.2em;color:#00d4ff;margin-bottom:8px;font-family:'Rajdhani',sans-serif}
+.vision-card p{font-size:10px;line-height:2;color:#8892a0}
+.vision-card .future{font-size:8px;color:#445;letter-spacing:.1em;margin-top:8px;text-transform:uppercase}
+
+.timeline{max-width:600px;margin:0 auto;padding:0 30px 60px}
+.timeline h2{font-family:'Rajdhani',sans-serif;font-size:18px;letter-spacing:.25em;color:#00d4ff;margin-bottom:24px;text-align:center}
+.tl{position:relative;padding-left:30px}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,#00d4ff33,#ff660033,transparent)}
+.tl-item{position:relative;margin-bottom:24px;padding-left:20px}
+.tl-item::before{content:'';position:absolute;left:-25px;top:6px;width:7px;height:7px;border-radius:50%;box-shadow:0 0 8px rgba(0,212,255,.4)}
+.tl-item.done::before{background:#00d4ff}
+.tl-item.now::before{background:#ff6600;box-shadow:0 0 12px rgba(255,102,0,.5)}
+.tl-item.next::before{background:#334;box-shadow:none;border:1px solid #445}
+.tl-item h4{font-size:11px;letter-spacing:.15em;margin-bottom:4px;font-weight:500}
+.tl-item.done h4{color:#00d4ff}
+.tl-item.now h4{color:#ff6600}
+.tl-item.next h4{color:#556}
+.tl-item p{font-size:10px;line-height:1.9;color:#8892a0}
+
+.next-nav{text-align:center;padding:40px 30px 80px}
+.next-nav p{font-size:10px;color:#445;letter-spacing:.12em;margin-bottom:16px}
+.next-nav a{display:inline-block;font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:.2em;font-weight:600;padding:10px 24px;border-radius:4px;text-decoration:none;transition:all .3s;margin:0 8px}
+.next-nav a.primary{color:#0d1b2a;background:#ff6600}
+.next-nav a.primary:hover{background:#ff9900;box-shadow:0 0 20px rgba(255,102,0,.3)}
+.next-nav a.ghost{background:transparent;color:#00d4ff;border:1px solid rgba(0,212,255,.2)}
+.next-nav a.ghost:hover{background:rgba(0,212,255,.05);border-color:#00d4ff}
+
+.footer{text-align:center;padding:30px;font-size:8px;color:#223;letter-spacing:.15em;border-top:1px solid rgba(0,212,255,.06)}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="/dent.html" class="nav-brand">DENT MATRIX</a>
+  <span class="nav-tag">V1 &middot; UNIFORM GRID &middot; THE FOUNDATION</span>
+  <div class="nav-links">
+    <a href="/dent.html">DENT 1</a>
+    <a href="/dent2.html">DENT 2</a>
+    <a href="/dent3.html" style="color:#00d4ff">DENT 3</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="pre">THE VISION &middot; WHERE IT ALL STARTS</div>
+  <h1>ORIGAMI BLOOD V1</h1>
+  <div class="sub">The uniform grid. Every triangle the same size. Fixed scaffold, fixed shards, fixed folds. Beautiful in its simplicity. This is the foundation — prove the fold-walk works at one scale before shrinking it across all scales.</div>
+  <div class="sub2">V1 PROVES THE MECHANIC. V2 PROVES THE PHYSICS. V3 WILL PROVE THE INTELLIGENCE.</div>
+</section>
+
+<div class="live-frame">
+  <iframe src="/origameblood-v1.html" loading="lazy"></iframe>
+</div>
+
+<section class="compare">
+  <h2>V1 vs V2 &mdash; THE PROGRESSION</h2>
+  <table class="compare-table">
+    <thead>
+      <tr><th>PROPERTY</th><th>V1 &mdash; UNIFORM GRID</th><th>V2 &mdash; SHRINKING CAPILLARIES</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Scaffold</td><td>Fixed triangular grid &mdash; all cells identical</td><td>Tree-based &mdash; each generation 4% smaller</td></tr>
+      <tr><td>Growth</td><td>Pre-built grid &mdash; scaffold exists before shards</td><td>Self-manufacturing &mdash; scaffold grows from seed</td></tr>
+      <tr><td>Triangle size</td><td>All 36px (uniform)</td><td>Seed 60px &rarr; shrinks to minimum 2px</td></tr>
+      <tr><td>Shard behaviour</td><td>Identical fold-walk everywhere</td><td>Fold height proportional to edge length &mdash; tighter in capillaries</td></tr>
+      <tr><td>Scale</td><td>Single scale</td><td>Multi-scale &mdash; arteries to capillaries</td></tr>
+      <tr><td>Path selection</td><td>Random neighbour</td><td>Random neighbour (pre-genomic)</td></tr>
+      <tr><td>Biology analogy</td><td>Proof of concept &mdash; blood flows</td><td>Cardiovascular system &mdash; blood reaches everywhere</td></tr>
+      <tr><td>Limitation</td><td>Can't reach small spaces</td><td>Branches can collapse into themselves (needs genomics)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="vision">
+  <h2>THE VISION &mdash; WHERE THIS GOES</h2>
+  <div class="vision-grid">
+    <div class="vision-card">
+      <h3>SIGHT TRAINING</h3>
+      <p>Transparent shape overlay. The origami mesh sits at 50% opacity over a target image. Train the nanites to trace the shape beneath. The ultimate pattern-matching exercise.</p>
+      <div class="future">NEXT: INDEX3 OVERLAY SYSTEM</div>
+    </div>
+    <div class="vision-card">
+      <h3>GENOMIC PATH SELECTION</h3>
+      <p>Colour-indexed directional control. Each shard reads the colour at index 0 to decide direction. No more collapsing into itself. Growth follows a genome.</p>
+      <div class="future">NEXT: COLOUR MAP AT EACH FORK</div>
+    </div>
+    <div class="vision-card">
+      <h3>MOUSE CONTROL</h3>
+      <p>Drag your mouse and the origami collapses the exact path needed to follow your cursor. Click zones drop red/green markers. The mesh becomes a neural controller.</p>
+      <div class="future">NEXT: MOUSE-SENSITIVE MESH</div>
+    </div>
+    <div class="vision-card">
+      <h3>GAMIFIED COMPETITION</h3>
+      <p>Draw the best square, triangle, circle in a set time. Accuracy scored. Shape-matching as competitive sport. Who can command the nanites most precisely?</p>
+      <div class="future">NEXT: TIMED SHAPE CHALLENGES</div>
+    </div>
+    <div class="vision-card">
+      <h3>ORIGAMI SOUNDS</h3>
+      <p>Each fold, build, collapse, and merge gets its own sound. The scaffold hums. The shards click. You hear the blood flowing through the body.</p>
+      <div class="future">NEXT: PIXABAY ORIGAMI SOUND PACK</div>
+    </div>
+    <div class="vision-card">
+      <h3>NANITE SCALE</h3>
+      <p>Same five rules at every scale. A 60px demo triangle and a real-world nanometre cell obey identical physics. This is the bridge from simulation to fabrication.</p>
+      <div class="future">ACTIVE: 10+ BIOTECH FIRMS CONTACTED</div>
+    </div>
+  </div>
+</section>
+
+<section class="timeline">
+  <h2>EVOLUTION</h2>
+  <div class="tl">
+    <div class="tl-item done">
+      <h4>V1 &mdash; UNIFORM GRID</h4>
+      <p>Fixed triangular mesh. Proves the fold-walk mechanic works. All cells same size. Random path selection. The foundation.</p>
+    </div>
+    <div class="tl-item now">
+      <h4>V2 &mdash; SHRINKING CAPILLARIES</h4>
+      <p>Self-manufacturing scaffold. 4% shrink per generation. Tree-based growth from a single seed. Pre-genomic &mdash; branches can overlap. Shows WHY genomics matters.</p>
+    </div>
+    <div class="tl-item next">
+      <h4>V3 &mdash; GENOMIC PATH SELECTION</h4>
+      <p>Colour-indexed directional control at every fork. No more collapsing into itself. Growth follows a programmed genome. The blood knows where to go.</p>
+    </div>
+    <div class="tl-item next">
+      <h4>V4 &mdash; SIGHT + MOUSE + SOUND</h4>
+      <p>Transparent overlay training. Mouse-driven path collapse. Origami sound effects. Gamified shape competition. The mesh becomes interactive.</p>
+    </div>
+    <div class="tl-item next">
+      <h4>V5 &mdash; FABRICATION</h4>
+      <p>From simulation to physical nanite. Same five rules. Same physics. Real-world shard transit in a real-world scaffold.</p>
+    </div>
+  </div>
+</section>
+
+<div class="next-nav">
+  <p>V1 (THIS PAGE) &rarr; V2 (SHRINKING) &rarr; V3 (GENOMIC) &rarr; V4 (INTERACTIVE) &rarr; V5 (FABRICATION)</p>
+  <a href="/dent2.html" class="primary">DENT 2 &mdash; V2 SHRINKING</a>
+  <a href="/dent.html" class="ghost">DENT MATRIX</a>
+</div>
+
+<div class="footer">SHORTFACTORY &middot; DENT MATRIX &middot; ORIGAMI BLOOD V1 &middot; 24 APRIL 2026 &middot; THE FOUNDATION: PROVE THE FOLD-WALK AT ONE SCALE BEFORE PROVING IT AT ALL SCALES</div>
+
+</body>
+</html>
