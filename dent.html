@@ -91,10 +91,11 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
 #pipe-dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
 .pipe-dot{width:5px;height:5px;border-radius:50%;background:#1b263b;transition:all .3s}
 .pipe-dot.active{background:#00d4ff;box-shadow:0 0 6px rgba(0,212,255,.4)}
-#sound-btn{position:fixed;bottom:16px;right:16px;z-index:100;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.08);color:rgba(0,212,255,.4);font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:.2em;padding:8px 16px;border-radius:20px;cursor:pointer;transition:all .6s;backdrop-filter:blur(8px);animation:btn-breathe 4s ease-in-out infinite}
-@keyframes btn-breathe{0%,100%{border-color:rgba(0,212,255,.06);color:rgba(0,212,255,.3)}50%{border-color:rgba(0,212,255,.18);color:rgba(0,212,255,.55)}}
-#sound-btn:hover{background:rgba(0,212,255,.12);border-color:#00d4ff;color:#00d4ff;box-shadow:0 0 16px rgba(0,212,255,.15);animation:none}
-#sound-btn.active{background:rgba(0,212,255,.1);border-color:#00d4ff;color:#00d4ff;box-shadow:0 0 12px rgba(0,212,255,.12);animation:none}
+.gate-btn{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:.15em;font-weight:600;padding:10px 20px;border-radius:4px;cursor:pointer;transition:all .4s;border:1px solid #00d4ff;background:#00d4ff;color:#0d1b2a;backdrop-filter:blur(8px);animation:gate-pulse 3s ease-in-out infinite}
+.gate-btn.ghost{background:transparent;color:#00d4ff;border-color:rgba(0,212,255,.25)}
+.gate-btn:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(0,212,255,.25)}
+@keyframes gate-pulse{0%,100%{box-shadow:0 0 8px rgba(0,212,255,.1)}50%{box-shadow:0 0 20px rgba(0,212,255,.2)}}
+#play-gate.hidden{opacity:0;pointer-events:none;transition:opacity .8s}
 
 /* ═══ INTRO OVERLAY ═══ */
 #intro-overlay{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(13,27,42,.95);pointer-events:none;transition:opacity 1.5s}
@@ -123,7 +124,10 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
   <div class="nav-brand">THE DENT MATRIX</div>
   <div class="nav-tag">ARTHUR ROBOTICS × SHORTFACTORY</div>
 </nav>
-<button id="sound-btn" onclick="toggleAmbient()">◉</button>
+<div id="play-gate" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:10px">
+  <button class="gate-btn" onclick="beginExperience(true)">▶ PLAY WITH MUSIC</button>
+  <button class="gate-btn ghost" onclick="beginExperience(false)">▶ PLAY WITHOUT MUSIC</button>
+</div>
 <div id="progress" style="width:0%"></div>
 
 <!-- ═══ MESH BACKGROUND ═══ -->
@@ -1037,7 +1041,7 @@ function createAmbient(){
     }
     if(p.reveal) ov.classList.add('reveal');
     if(p.vid==='mesh'){showVid(meshVid2);hideVid(origVid);}
-    if(p.vid==='origami'){hideVid(meshVid2);showVid(origVid);}
+    if(p.vid==='origami'){hideVid(meshVid2);showVid(origVid);if(delayedMusic){delayedMusic=false;startMusic();}}
     if(p.audio && userInteracted) tryPlay(p.audio);
     if(p.fade) p.fade.forEach(i=>{if(els[i]){els[i].classList.remove('show');els[i].classList.add('fade');}});
     if(p.show) p.show.forEach(i=>{if(els[i]){els[i].classList.remove('fade');els[i].classList.add('show');}});
@@ -1048,26 +1052,24 @@ function createAmbient(){
   setTimeout(()=>runPhase(0),800);
 })();
 
-function toggleAmbient(){
-  const btn=document.getElementById('sound-btn');
+let delayedMusic=false;
+function startMusic(){
   const bgMovie=document.getElementById('bg-movie');
   const bgZen=document.getElementById('bg-zen');
-  if(!ambientOn){
-    ambientOn=true;musicOn=true;
-    if(!ambientCtx) createAmbient();
-    else masterGain.gain.setTargetAtTime(0.7,ambientCtx.currentTime,1);
-    if(ambientCtx.state==='suspended') ambientCtx.resume();
-    if(bgMovie){bgMovie.volume=0.2;bgMovie.play().catch(()=>{});}
-    if(bgZen){bgZen.volume=0;bgZen.play().catch(()=>{});}
-    window.dispatchEvent(new Event('scroll'));
-    btn.textContent='◉';btn.classList.add('active');
-  } else {
-    ambientOn=false;musicOn=false;
-    masterGain.gain.setTargetAtTime(0,ambientCtx.currentTime,1);
-    if(bgMovie)bgMovie.pause();
-    if(bgZen)bgZen.pause();
-    btn.textContent='◉';btn.classList.remove('active');
-  }
+  musicOn=true;
+  if(bgMovie){bgMovie.volume=0.2;bgMovie.play().catch(()=>{});}
+  if(bgZen){bgZen.volume=0;bgZen.play().catch(()=>{});}
+  window.dispatchEvent(new Event('scroll'));
+}
+function beginExperience(withMusic){
+  const gate=document.getElementById('play-gate');
+  gate.classList.add('hidden');
+  ambientOn=true;
+  if(!ambientCtx) createAmbient();
+  else masterGain.gain.setTargetAtTime(0.7,ambientCtx.currentTime,1);
+  if(ambientCtx.state==='suspended') ambientCtx.resume();
+  if(withMusic){startMusic();}
+  else{delayedMusic=true;}
 }
 </script>
 </body>
