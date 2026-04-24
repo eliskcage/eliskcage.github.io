@@ -283,6 +283,31 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
   </div>
 </section>
 
+<!-- ═══ ALUMINIUM CHEMISTRY — POWER METABOLISM ═══ -->
+<section class="section" id="s-chem">
+  <div class="sect-title">THE CHEMISTRY</div>
+  <div class="sect-sub">ALUMINIUM POWER · DISSOLVABLE CONDUCTORS · SUPERCAPACITOR NODES</div>
+  <div style="width:100%;max-width:700px;height:320px;margin-bottom:24px;position:relative"><canvas id="chem-c" style="width:100%;height:100%;border-radius:8px"></canvas></div>
+  <div class="card-grid" style="max-width:700px">
+    <div class="card">
+      <h3>EXPLOSIVE ALUMINIUM</h3>
+      <p>Aluminium powder is one of the most energy-dense chemical fuels. Controlled detonation at node scale delivers immense force for rapid reconfiguration. The same element that conducts also explodes. Dual-use at every point in the scaffold.</p>
+    </div>
+    <div class="card">
+      <h3>DISSOLVABLE CONDUCTORS</h3>
+      <p>Aluminium shards dissolve at target nodes to create temporary conductive pathways. Power routes itself through the scaffold like water finding the fastest downhill path. When the task changes, the pathway dissolves and re-forms elsewhere.</p>
+    </div>
+    <div class="card">
+      <h3>SUPERCAPACITOR CYCLE</h3>
+      <p>Every node stores energy like a supercapacitor. Fire → spend → drain → recharge. Aluminium shards arrive, dissolve, the node surges back to full. The recharge is immensely fast because the delivery system is the same polarisation-flip transit that moves the shards. No separate charging infrastructure.</p>
+    </div>
+    <div class="card">
+      <h3>THE METABOLISM</h3>
+      <p>Real blood carries oxygen for energy AND glucose for fuel AND platelets for repair. These shards do the same — conductive material for power, structural material for reinforcement, chemical energy for explosive force. One transit system. Three functions. Biology solved it first. We solved it second.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ═══ THE SHARDS — CIRCULATORY SYSTEM ═══ -->
 <section class="section" id="s-shards">
   <div class="sect-title">THE SHARDS</div>
@@ -898,6 +923,188 @@ if(sc){
   }
   requestAnimationFrame(scaffAnim);
 }
+
+// ═══ ALUMINIUM CHEMISTRY ANIMATION ═══
+(function(){
+  const cc=document.getElementById('chem-c');
+  if(!cc)return;
+  const ctx=cc.getContext('2d');
+  const W=700,H=320;
+
+  // Supercapacitor nodes in a circuit-like layout
+  const capNodes=[];
+  for(let i=0;i<24;i++){
+    const angle=(i/24)*Math.PI*2;
+    const ring=i%3;
+    const r=[90,140,185][ring];
+    capNodes.push({
+      x:W/2+Math.cos(angle+ring*0.3)*r,
+      y:H/2+Math.sin(angle+ring*0.3)*r,
+      charge:0.2+Math.random()*0.8,
+      maxCharge:1,
+      draining:false,
+      drainT:0,
+      recharging:false,
+      rechargeT:0,
+      size:8+ring*3
+    });
+  }
+
+  // Dissolving pathways
+  const paths=[];
+  function spawnPath(){
+    const a=Math.floor(Math.random()*capNodes.length);
+    let b=Math.floor(Math.random()*capNodes.length);
+    if(b===a)b=(a+1)%capNodes.length;
+    paths.push({a,b,life:1,dissolveRate:0.003+Math.random()*0.004,active:true,sparks:[]});
+  }
+
+  // Explosions
+  const explosions=[];
+
+  function chemAnim(t){
+    const rect=cc.parentElement.getBoundingClientRect();
+    cc.width=rect.width*(devicePixelRatio||1);cc.height=rect.height*(devicePixelRatio||1);
+    ctx.scale(devicePixelRatio||1,devicePixelRatio||1);
+    const w=rect.width,h=rect.height;
+    ctx.clearRect(0,0,w,h);
+    const sx=w/W,sy=h/H;
+
+    // Spawn events
+    if(paths.length<4&&Math.random()<0.03)spawnPath();
+    if(Math.random()<0.008){
+      const ni=Math.floor(Math.random()*capNodes.length);
+      capNodes[ni].draining=true;capNodes[ni].drainT=0;
+    }
+
+    // Draw dissolving aluminium pathways
+    paths.forEach((p,pi)=>{
+      if(!p.active)return;
+      p.life-=p.dissolveRate;
+      if(p.life<=0){p.active=false;return;}
+      const nA=capNodes[p.a],nB=capNodes[p.b];
+      const segments=12;
+      for(let s=0;s<segments;s++){
+        const frac=s/segments;
+        const nextFrac=(s+1)/segments;
+        const dissolve=Math.sin(frac*Math.PI+t*0.005)*0.3;
+        const alpha=p.life*(0.3+dissolve*0.3);
+        if(alpha<=0)continue;
+        const x1=(nA.x+(nB.x-nA.x)*frac)*sx;
+        const y1=(nA.y+(nB.y-nA.y)*frac)*sy;
+        const x2=(nA.x+(nB.x-nA.x)*nextFrac)*sx;
+        const y2=(nA.y+(nB.y-nA.y)*nextFrac)*sy;
+        ctx.strokeStyle=`rgba(200,200,220,${alpha})`;
+        ctx.lineWidth=1+p.life*2;
+        ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+        // Aluminium shimmer
+        if(Math.random()<0.15){
+          ctx.fillStyle=`rgba(220,230,255,${alpha*0.6})`;
+          ctx.fillRect(x1-1,y1-1,2,2);
+        }
+      }
+      // Power flowing through pathway
+      const flowPos=(t*0.003)%1;
+      const fx=(nA.x+(nB.x-nA.x)*flowPos)*sx;
+      const fy=(nA.y+(nB.y-nA.y)*flowPos)*sy;
+      const fg=ctx.createRadialGradient(fx,fy,0,fx,fy,6);
+      fg.addColorStop(0,`rgba(255,200,100,${p.life*0.6})`);fg.addColorStop(1,'transparent');
+      ctx.fillStyle=fg;ctx.fillRect(fx-6,fy-6,12,12);
+    });
+    // Clean dead paths
+    for(let i=paths.length-1;i>=0;i--)if(!paths[i].active)paths.splice(i,1);
+
+    // Draw supercapacitor nodes
+    capNodes.forEach((n,ni)=>{
+      // Drain cycle
+      if(n.draining){
+        n.drainT+=0.02;
+        n.charge=Math.max(0.05,n.charge-0.015);
+        if(n.drainT>1){
+          n.draining=false;
+          n.recharging=true;n.rechargeT=0;
+          // Explosion on full discharge
+          if(n.charge<0.15){
+            explosions.push({x:n.x,y:n.y,r:0,maxR:40+Math.random()*30,life:1});
+          }
+        }
+      }
+      // Recharge cycle
+      if(n.recharging){
+        n.rechargeT+=0.015;
+        n.charge=Math.min(1,n.charge+0.02);
+        if(n.charge>=0.95){n.recharging=false;}
+      }
+
+      const nx=n.x*sx,ny=n.y*sy;
+      const pulse=0.8+0.2*Math.sin(t*0.003+ni);
+
+      // Charge ring (like a capacitor gauge)
+      const chargeAngle=n.charge*Math.PI*2;
+      ctx.strokeStyle=`rgba(255,80,80,${0.15+n.charge*0.15})`;ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(nx,ny,n.size*sx,-Math.PI/2,-Math.PI/2+chargeAngle);ctx.stroke();
+      // Full ring outline
+      ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=0.5;
+      ctx.beginPath();ctx.arc(nx,ny,n.size*sx,0,Math.PI*2);ctx.stroke();
+
+      // Core glow
+      const coreAlpha=0.1+n.charge*0.4;
+      const coreCol=n.recharging?'255,200,100':n.draining?'255,60,60':'0,212,255';
+      const cg=ctx.createRadialGradient(nx,ny,0,nx,ny,n.size*sx*1.5);
+      cg.addColorStop(0,`rgba(${coreCol},${coreAlpha*pulse})`);cg.addColorStop(1,'transparent');
+      ctx.fillStyle=cg;ctx.fillRect(nx-n.size*sx*1.5,ny-n.size*sx*1.5,n.size*sx*3,n.size*sx*3);
+
+      // Inner dot
+      ctx.fillStyle=`rgba(${coreCol},${coreAlpha*0.8})`;
+      ctx.beginPath();ctx.arc(nx,ny,2+n.charge*2,0,Math.PI*2);ctx.fill();
+
+      // Recharge sparks
+      if(n.recharging&&Math.random()<0.3){
+        const sa=Math.random()*Math.PI*2;
+        const sr=n.size*sx*(1+Math.random()*0.5);
+        ctx.fillStyle='rgba(255,220,100,0.5)';
+        ctx.fillRect(nx+Math.cos(sa)*sr-1,ny+Math.sin(sa)*sr-1,2,2);
+      }
+    });
+
+    // Explosions
+    explosions.forEach((ex,ei)=>{
+      ex.r+=2;ex.life*=0.94;
+      if(ex.life<0.02){explosions.splice(ei,1);return;}
+      const exs=ex.x*sx,eys=ex.y*sy;
+      // Shockwave ring
+      ctx.strokeStyle=`rgba(255,140,0,${ex.life*0.5})`;ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.arc(exs,eys,ex.r*sx,0,Math.PI*2);ctx.stroke();
+      // Inner flash
+      const eg=ctx.createRadialGradient(exs,eys,0,exs,eys,ex.r*sx*0.5);
+      eg.addColorStop(0,`rgba(255,255,200,${ex.life*0.3})`);eg.addColorStop(1,'transparent');
+      ctx.fillStyle=eg;ctx.fillRect(exs-ex.r*sx,eys-ex.r*sx,ex.r*sx*2,ex.r*sx*2);
+      // Debris particles
+      for(let d=0;d<6;d++){
+        const da=(d/6)*Math.PI*2+t*0.01;
+        const dr=ex.r*sx*(0.5+Math.random()*0.5);
+        ctx.fillStyle=`rgba(200,200,220,${ex.life*0.4})`;
+        ctx.fillRect(exs+Math.cos(da)*dr-1,eys+Math.sin(da)*dr-1,2,2);
+      }
+    });
+
+    // Labels
+    ctx.font='7px "Space Grotesk",sans-serif';ctx.textAlign='right';
+    ctx.fillStyle='rgba(255,200,100,0.12)';
+    ctx.fillText('ALUMINIUM DISSOLUTION',w-10,14);
+    ctx.fillText('SUPERCAPACITOR CYCLE',w-10,24);
+    ctx.fillText('EXPLOSIVE RECONFIGURATION',w-10,34);
+
+    // Legend
+    ctx.textAlign='left';ctx.font='6px "Space Grotesk",sans-serif';
+    ctx.fillStyle='rgba(0,212,255,0.3)';ctx.fillText('CHARGED',8,h-30);
+    ctx.fillStyle='rgba(255,60,60,0.3)';ctx.fillText('DRAINING',8,h-20);
+    ctx.fillStyle='rgba(255,200,100,0.3)';ctx.fillText('RECHARGING',8,h-10);
+
+    requestAnimationFrame(chemAnim);
+  }
+  requestAnimationFrame(chemAnim);
+})();
 
 // ═══ SHARD TRANSIT ANIMATION ═══
 (function(){
