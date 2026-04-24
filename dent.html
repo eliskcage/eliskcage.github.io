@@ -91,6 +91,9 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
 #pipe-dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
 .pipe-dot{width:5px;height:5px;border-radius:50%;background:#1b263b;transition:all .3s}
 .pipe-dot.active{background:#00d4ff;box-shadow:0 0 6px rgba(0,212,255,.4)}
+#sound-btn{position:fixed;bottom:16px;right:16px;z-index:100;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);color:#00d4ff;font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:.15em;padding:6px 14px;border-radius:20px;cursor:pointer;transition:all .3s;backdrop-filter:blur(8px)}
+#sound-btn:hover{background:rgba(0,212,255,.15);border-color:#00d4ff}
+#sound-btn.active{background:rgba(0,212,255,.12);border-color:#00d4ff;box-shadow:0 0 12px rgba(0,212,255,.15)}
 </style>
 </head>
 <body>
@@ -99,6 +102,7 @@ body{background:#0d1b2a;color:#e0e6ed;font-family:'Space Grotesk',system-ui,sans
   <div class="nav-brand">THE DENT MATRIX</div>
   <div class="nav-tag">ARTHUR ROBOTICS × SHORTFACTORY</div>
 </nav>
+<button id="sound-btn" onclick="toggleAmbient()">SOUND ON</button>
 <div id="progress" style="width:0%"></div>
 
 <!-- ═══ MESH BACKGROUND ═══ -->
@@ -832,6 +836,98 @@ if(sc){
   };
   img.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent(url);
 })();
+
+// ═══ AMBIENT SYNTH ENGINE — Limitless-style evolving pad ═══
+let ambientCtx=null, ambientOn=false, masterGain=null;
+const AMB_NOTES=[55,65.41,82.41,110,130.81,164.81,220]; // A1,C2,E2,A2,C3,E3,A3
+
+function createAmbient(){
+  ambientCtx=new(window.AudioContext||window.webkitAudioContext)();
+  masterGain=ambientCtx.createGain();
+  masterGain.gain.value=0;
+  masterGain.connect(ambientCtx.destination);
+
+  // Deep sub pad
+  const sub=ambientCtx.createOscillator();
+  sub.type='sine';sub.frequency.value=55;
+  const subG=ambientCtx.createGain();subG.gain.value=0.12;
+  sub.connect(subG);subG.connect(masterGain);sub.start();
+
+  // Warm pad — 3 detuned saws through LP filter
+  for(let i=0;i<3;i++){
+    const osc=ambientCtx.createOscillator();
+    osc.type='sawtooth';
+    osc.frequency.value=110*(1+i*0.002);
+    osc.detune.value=(i-1)*8;
+    const filt=ambientCtx.createBiquadFilter();
+    filt.type='lowpass';filt.frequency.value=400;filt.Q.value=1;
+    const g=ambientCtx.createGain();g.gain.value=0.03;
+    osc.connect(filt);filt.connect(g);g.connect(masterGain);osc.start();
+
+    // Slowly modulate filter
+    (function lfo(){
+      const now=ambientCtx.currentTime;
+      filt.frequency.setTargetAtTime(300+Math.sin(now*0.1+i)*200,now,2);
+      if(ambientOn) setTimeout(lfo,200);
+    })();
+  }
+
+  // Shimmer layer — high sine harmonics that fade in/out
+  function shimmer(){
+    if(!ambientOn)return;
+    const note=AMB_NOTES[Math.floor(Math.random()*AMB_NOTES.length)]*4;
+    const osc=ambientCtx.createOscillator();
+    osc.type='sine';osc.frequency.value=note+(Math.random()-0.5)*2;
+    const g=ambientCtx.createGain();
+    const now=ambientCtx.currentTime;
+    g.gain.setValueAtTime(0,now);
+    g.gain.linearRampToValueAtTime(0.015+Math.random()*0.01,now+1.5);
+    g.gain.linearRampToValueAtTime(0,now+4+Math.random()*3);
+    osc.connect(g);g.connect(masterGain);
+    osc.start(now);osc.stop(now+7);
+    setTimeout(shimmer,2000+Math.random()*3000);
+  }
+  shimmer();
+
+  // Scroll-reactive chime — gentle ping when scrolling into new sections
+  let lastScrollChime=0;
+  window.addEventListener('scroll',()=>{
+    if(!ambientOn)return;
+    const now2=Date.now();
+    if(now2-lastScrollChime<3000)return;
+    const scrollP=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);
+    const noteIdx=Math.floor(scrollP*AMB_NOTES.length);
+    const freq=AMB_NOTES[Math.min(noteIdx,AMB_NOTES.length-1)]*2;
+    lastScrollChime=now2;
+    const osc=ambientCtx.createOscillator();
+    osc.type='sine';osc.frequency.value=freq;
+    const g=ambientCtx.createGain();
+    const t2=ambientCtx.currentTime;
+    g.gain.setValueAtTime(0,t2);
+    g.gain.linearRampToValueAtTime(0.04,t2+0.1);
+    g.gain.exponentialRampToValueAtTime(0.001,t2+3);
+    osc.connect(g);g.connect(masterGain);
+    osc.start(t2);osc.stop(t2+3);
+  });
+
+  // Fade master in
+  masterGain.gain.setTargetAtTime(0.7,ambientCtx.currentTime,2);
+}
+
+function toggleAmbient(){
+  const btn=document.getElementById('sound-btn');
+  if(!ambientOn){
+    ambientOn=true;
+    if(!ambientCtx) createAmbient();
+    else masterGain.gain.setTargetAtTime(0.7,ambientCtx.currentTime,1);
+    if(ambientCtx.state==='suspended') ambientCtx.resume();
+    btn.textContent='SOUND OFF';btn.classList.add('active');
+  } else {
+    ambientOn=false;
+    masterGain.gain.setTargetAtTime(0,ambientCtx.currentTime,1);
+    btn.textContent='SOUND ON';btn.classList.remove('active');
+  }
+}
 </script>
 </body>
 </html>
